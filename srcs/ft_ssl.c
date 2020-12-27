@@ -1,31 +1,34 @@
 #include "ft_ssl.h"
 
-int				get_text(int argc, char argv, t_ssl *data)
-{
-	
-}
-
-static t_ssl	parse_arguments(int argc, char **argv, t_ssl *data)
+int				error_option(char *s)
 {
 	int			i;
 
-	i = 2;
-	while (i < argc && argv[i][0] == '-' && argv[i][2] == '\0')
+	i = 0;
+	write(1, "ft_ssl: Error: \'", ft_strlen("ft_ssl: Error: \'"));
+	write(1, s, ft_strlen(s));
+	write(1, "\' is an invalid command.\n\n", ft_strlen("\' is an invalid command.\n\n"));
+	write(1, "Message Digest commands:\n", ft_strlen("Message Digest commands:\n"));
+	while (mdoptions[i] != NULL)
 	{
-		if (ft_strchr(PARAMS, argv[i][1]) == NULL)
-			return (NULL);
-		if (argv[i][1] == 'p')
-			data->param_options[0] == 1;
-		else if (argv[i][1] == 'q')
-			data->param_options[1] == 1;
-		else if (argv[i][1] == 'r')
-			data->param_options[2] == 1;
-		else if (argv[i][1] == 's')
-			data->param_options[3] == 1;
+		write(1, mdoptions[i], ft_strlen(mdoptions[i]));
+		write(1, "\n", 1);
 	}
-	if (get_text(i, argv, data) == 0)
-		return (NULL); 
-	return (data);
+	return (0);
+}
+
+int				parse_params(int argc, char **argv, t_ssl *data)
+{
+	int			i;
+
+	i = 0;
+	while (mdoptions[i] != NULL)
+	{
+		if (ft_strcmp(mdoptions[i], argv[1]) == 0)
+			return (parse_md_arg(argv, argc, data, mdfunc[i]);
+		i++;
+	}
+	return (0);
 }
 
 int				main(int argc, char **argv)
@@ -34,11 +37,11 @@ int				main(int argc, char **argv)
 	int			len;
 
 	if (argc < 1)
+	{
+		write(1, USAGE, ft_strlen(USAGE));
 		return (0);
-	len = ft_strlen2(options);
-	while (--len)
-		if (ft_strcmp(options[len], argv[1]) == 0)
-			return (func[len](parse_arguments(argc, argv, data)));
-	write(1, USAGE, ft_strlen(USAGE));
+	}
+	if (parse_params(argc, argv, &data) == 0)
+		error_option(argv[1]);
 	return (0);
 }

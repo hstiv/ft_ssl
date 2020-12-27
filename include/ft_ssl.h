@@ -2,11 +2,19 @@
 # define FT_SSL_H
 
 # include <stdint.h>
+# include "libft.h"
 
-# define PARAMS "pqrs\0"
+# define MDPARAMS "pqrs\0"
 # define USAGE "usage: ft_ssl command [command opts] [command args]\n"
 
 typedef struct	s_ssl
+{
+    int         *params;
+    char        *file_name;
+    char        *input_text;
+}				t_ssl;
+
+typedef struct	s_md5
 {
 	uint32_t	a;
 	uint32_t	b;
@@ -14,13 +22,25 @@ typedef struct	s_ssl
 	uint32_t	d;
 	uint32_t	k[64];
 	uint32_t	s[64];
-    int         param_options[4]; /* -p[0], -q[], -r[], -s[]*/
-    char        *file_name;
-    char        *input_text;
-	
-}				t_ssl;
+}				t_md5;
 
-void            func[2] = {&md5, &sha256};
-char            *options[2] = {"md5\0","sha256\0"};
+typedef struct	s_sha256
+{
+	uint32_t	a;
+	uint32_t	b;
+	uint32_t	c;
+	uint32_t	d;
+	uint32_t	k[64];
+	uint32_t	s[64];
+}				t_sha256;
+
+void            mdfunc[2] = {&md5, &sha256};
+char            *mdoptions[2] = {"md5\0","sha256\0"};
+
+int				error_option(char *s);
+int				parse_params(int argc, char **argv, t_ssl *data);
+int             parse_md_arg(int argc, char **argv, t_ssl *data);
+uint32_t		md5(char *s);
+uint32_t		sha256(char *s);
 
 #endif
