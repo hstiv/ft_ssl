@@ -24,7 +24,7 @@ static char		*get_text(fd)
 	return (s);
 }
 
-static int		read_args(char argv, t_ssl *data, int (*f)(t_ssl *))
+static int		read_args(char argv, t_ssl *data, int (*f)(char *))
 {
 	char		*txt;
 	int			fd;
@@ -33,7 +33,9 @@ static int		read_args(char argv, t_ssl *data, int (*f)(t_ssl *))
 	fd = open(argv, O_RDONLY);
 	txt = get_text(fd);
 	close(fd);
-	print_md((txt ? txt : argv), data);
+	data->input_text = txt ? txt : argv;
+	print_md((*f)(data->input_text), data);
+	txt ? free(txt) : 0;
 	return (1);
 }
 
@@ -49,7 +51,7 @@ static void		set_opt(data, char c)
 		data->params[3] == 1;
 }
 
-int             parse_md_arg(int argc, char **argv, t_ssl *data, int (*f)(t_ssl *))
+int             parse_md_arg(int argc, char **argv, t_ssl *data, int (*f)(char *))
 {
 	int			i;
 
