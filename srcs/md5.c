@@ -1,17 +1,6 @@
 #include <stdint.h>
 
-typedef struct	s_ssl
-{
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
-	uint32_t	k[64];
-	uint32_t	s[64];
-	
-}				t_ssl;
-
-double		pw(double x, double y)
+double		fpow(double x, double y)
 {
 	double	res;
 	
@@ -21,7 +10,7 @@ double		pw(double x, double y)
 	return (res);
 }
 
-int			absl(int j)
+int			fabs(int j)
 {
 	return (j < 0 ? -j : j);
 }

@@ -55,17 +55,12 @@ SRC = $(PATH_SRC)ft_strlen.c \
 	$(PATH_SRC)ft_putstr_fd.c \
 	$(PATH_SRC)ft_putendl_fd.c \
 	$(PATH_SRC)ft_putnbr_fd.c \
-	$(PATH_SRC)ft_lstnew.c \
 	$(PATH_SRC)ft_count_char.c \
 	$(PATH_SRC)ft_strclr.c \
 	$(PATH_SRC)ft_strlenc.c \
-	$(PATH_SRC)ft_lstadd.c \
-	$(PATH_SRC)ft_lstdelone.c \
-	$(PATH_SRC)ft_lstdel.c \
-	$(PATH_SRC)ft_lstiter.c \
-	$(PATH_SRC)ft_lstmap.c \
-	$(PATH_SRC)ft_dellst.c \
-	$(PATH_SRC)ft_arraydel.c
+	$(PATH_SRC)ft_arraydel.c \
+	$(PATH_SRC)ft_strlen2.c \
+	$(PATH_SRC)get_next_line.c
 
 CFLAGS = -Wall -Wextra -Werror
 
