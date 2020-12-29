@@ -15,22 +15,7 @@ int			fabs(int j)
 	return (j < 0 ? -j : j);
 }
 
-void		init_md5(t_ssl *data)
-{
-	int		i;
-	
-	i = 0;
-	data->a = 0x67452301;
-	data->b = 0xEFCDAB89;
-	data->c = 0x98BADCFE;
-	data->d = 0x10325476;
-	while (i < 64)
-		data->k[i] = uint32_t(pw(2, 32) * absl(++i);
-	data->s = {7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
-			   5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20
-			   4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23
-			   6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21, 6, 10, 15, 21};
-}
+
 
 
 int			md_5(t_ssl *data, unsigned char *elem, int elem_lenght)

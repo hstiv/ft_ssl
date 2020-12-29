@@ -16,22 +16,28 @@ typedef struct	s_ssl
 
 typedef struct	s_md5
 {
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
+	uint32_t	a0;
+	uint32_t	b0;
+	uint32_t	c0;
+	uint32_t	d0;
 	uint32_t	k[64];
 	uint32_t	s[64];
+	char		*bytes;
+	char		*str;
+	size_t		length;
 }				t_md5;
 
 typedef struct	s_sha256
 {
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
+	uint32_t	a0;
+	uint32_t	b0;
+	uint32_t	c0;
+	uint32_t	d0;
 	uint32_t	k[64];
 	uint32_t	s[64];
+	char		*bytes;
+	char		*str;
+	size_t		length;
 }				t_sha256;
 
 void            mdfunc[2] = {&md5, &sha256};
