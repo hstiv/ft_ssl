@@ -24,18 +24,22 @@ static char		*get_text(fd)
 	return (s);
 }
 
-static int		read_args(char argv, t_ssl *data, int (*f)(char *))
+static int		read_args(char *argv, t_ssl *data, int (*f)(char *))
 {
-	char		*txt;
 	int			fd;
 	
 	ft_memdel(&txt);
-	fd = open(argv, O_RDONLY);
-	txt = get_text(fd);
-	close(fd);
-	data->input_text = txt ? txt : argv;
+	data->file_name = ft_strdup(argv);
+	if ((fd = open(argv, O_RDONLY)) != -1)
+	{
+		data->input_text = get_text(fd);
+		close(fd);
+	}
+	else
+		data->input_text = ft_strdup(argv);
 	print_md((*f)(data->input_text), data);
-	txt ? free(txt) : 0;
+	ft_memdel(&data->input_text);
+	ft_memdel(&data->file_name);
 	return (1);
 }
 
@@ -73,5 +77,6 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, int (*f)(char *
 	print_md((*f)(data->input_text), data);
 	while (i < argc)
 		read_args(argv[i], data, (*f));
+	ft_memdel(&data->params);
 	return (1);
 }

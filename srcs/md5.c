@@ -6,5 +6,5 @@ uint32_t		md5(char *s)
 
 	if (s == NULL || parse_md_args(argc, argv, data) == 0)
 		return (0);
-
+	
 }
