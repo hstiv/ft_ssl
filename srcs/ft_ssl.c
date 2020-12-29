@@ -24,7 +24,7 @@ int				parse_params(int argc, char **argv, t_ssl *data)
 	i = 0;
 	while (mdoptions[i] != NULL)
 	{
-		if (ft_strcmp(mdoptions[i], argv[1]) == 0)
+		if (!ft_strcmp(mdoptions[i], argv[1]))
 			return (parse_md_arg(argv, argc, data, mdfunc[i]);
 		i++;
 	}
