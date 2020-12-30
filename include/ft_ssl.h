@@ -28,8 +28,6 @@ typedef struct	s_md5
 	uint32_t	bb;
 	uint32_t	cc;
 	uint32_t	dd;
-	uint32_t	k[64];
-	uint32_t	s[64];
 	int			f;
 	int			g;
 	char		*bytes;
@@ -50,12 +48,11 @@ typedef struct	s_sha256
 	size_t		length;
 }				t_sha256;
 
-void            mdfunc[2] = {&md5, &sha256};
+char			*md5(char *s);
+char			*sha256(char *s);
+char			*mdfunc[2] = {md5, sha256};
 char            *mdoptions[2] = {"md5\0","sha256\0"};
-
 int				error_option(char *s);
-int             parse_md_arg(int argc, char **argv, t_ssl *data);
-uint32_t		md5(char *s);
-uint32_t		sha256(char *s);
+int             parse_md_arg(int argc, char **argv, t_ssl *data, char *f(char *));
 
 #endif
