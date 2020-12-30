@@ -17,7 +17,7 @@ int				error_option(char *s)
 	return (0);
 }
 
-int				parse_params(int argc, char **argv, t_ssl *data)
+static int		parse_params(int argc, char **argv, t_ssl *data)
 {
 	int			i;
 
