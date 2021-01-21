@@ -22,13 +22,22 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 	int			i;
 
 	i = 0;
+
 	while (mdoptions[i] != NULL)
 	{
 		if (!ft_strcmp(mdoptions[i], argv[1]))
-			return (parse_md_arg(argc, argv, data, mdfunc[i]));
+			return (parse_md_arg(argc, argv, data, i));
 		i++;
 	}
 	return (0);
+}
+
+static void		init_globals(void)
+{
+	mdoptions[0] = ft_strdup("md5\0");
+	mdoptions[1] = ft_strdup("sha256\0");
+	mdfunc[0] = &md5;
+	mdfunc[1] = &sha256;
 }
 
 int				main(int argc, char **argv)
@@ -36,6 +45,7 @@ int				main(int argc, char **argv)
 	t_ssl		data;
 	int			len;
 
+	init_globals();
 	if (argc < 1)
 	{
 		write(1, USAGE, ft_strlen(USAGE));

@@ -28,7 +28,7 @@ static char		*get_text(int fd)
 	return (s);
 }
 
-static int		read_args(char *argv, t_ssl *data, char *(f)(char *))
+static int		read_args(char *argv, t_ssl *data, int func_index)
 {
 	int			fd;
 	
@@ -40,8 +40,8 @@ static int		read_args(char *argv, t_ssl *data, char *(f)(char *))
 	}
 	else
 		data->input_text = ft_strdup(argv);
-	if (print_md(f(data->input_text), data) == -1)
-		reutrn (-1);
+	if (print_md(mdfunc[func_index](data->input_text), data) == -1)
+		return (-1);
 	ft_memdel((void **)&data->input_text);
 	ft_memdel((void **)&data->file_name);
 	return (1);
@@ -59,7 +59,7 @@ static void		set_opt(t_ssl *data, char c)
 		data->params[3] == 1;
 }
 
-int             parse_md_arg(int argc, char **argv, t_ssl *data, char *f(char *))
+int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 {
 	int			i;
 
@@ -78,9 +78,9 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, char *f(char *)
 		i++;
 	}
 	data->input_text = get_text(1);
-	print_md((f)(data->input_text), data);
+	print_md(mdfunc[func_index](data->input_text), data);
 	while (i < argc)
-		if (read_args(argv[i], data, (*f)) == -1)
+		if (read_args(argv[i], data, func_index) == -1)
 			return (-1);
 	ft_memdel((void **)&data->params);
 	return (1);
