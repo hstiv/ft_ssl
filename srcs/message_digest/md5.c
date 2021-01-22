@@ -1,18 +1,5 @@
 #include "ft_ssl.h"
 
-static char		*md5_formatter(t_md5 *md5)
-{
-	char		*s;
-
-	ft_memdel((void **)&md5->bytes);
-	s = ft_strnew(16);
-	*s = md5->a;
-	*(s + 4) = md5->b;
-	*(s + 8) = md5->c;
-	*(s + 12) = md5->d;
-	return (s);
-}
-
 const uint32_t k[64] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 

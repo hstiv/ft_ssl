@@ -1,9 +1,6 @@
-static char			*sha256_formatter(t_sha256 *data)
-{
-	
-}
+#include "ft_ssl.h"
 
-const uint32_t k[64] = {
+const uint32_t s_k[64] = {
 	0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
 	0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 0x72BE5D74, 0x80DEB1FE, 0x9BDC06A7, 0xC19BF174,
 	0xE49B69C1, 0xEFBE4786, 0x0FC19DC6, 0x240CA1CC, 0x2DE92C6F, 0x4A7484AA, 0x5CB0A9DC, 0x76F988DA,
@@ -18,7 +15,7 @@ static void			init_sha256(t_sha256 *data)
 {
 	int				i;
 
-	i = 0;
+	i = -1;
 	data->h[0] = 0x6A09E667;
 	data->h[1] = 0xBB67AE85;
 	data->h[2] = 0x3C6EF372;
@@ -27,26 +24,68 @@ static void			init_sha256(t_sha256 *data)
 	data->h[5] = 0x9B05688C;
 	data->h[6] = 0x1F83D9AB;
 	data->h[7] = 0x5BE0CD19;
-	while (i < 8)
-		data->ah[i] = data->h[i++];
+	while (++i < 8)
+		data->ah[i] = data->h[i];
 }	
 
 static int			padding(char *s, t_sha256 *data)
 {
 	int				i;
 
-	i = 0;
 	data->length = ft_strlen(s) * 8;
 	data->m = ((data->length + 80) / 512) + 1;
 	if (!(data->bytes = malloc(16 * 4 * data->m)))
 		return (-1);
 	ft_bzero(data->bytes, 16 * 4 * data->m);
 	ft_strncpy((char*)data->bytes, s, ft_strlen(s));
-	(char*)data->bytes[ft_strlen(s)] = 0x80;
-	while (i < data->m * 16 - 1)
-		data->bytes[i] = revers_uint32(data->bytes[i++]);
+	((char*)data->bytes)[ft_strlen(s)] = 0x80;
+	i = -1;
+	while (++i < data->m * 16 - 1)
+		data->bytes[i] = REV_UINT32(data->bytes[i]);
 	data->bytes[((data->m * 512 - 64) / 32) + 1] = data->length;
 	return (1);
+}
+
+static void			fout(t_sha256 *data, int i)
+{
+	int				j;
+	uint32_t		s0;
+	uint32_t		s1;
+
+	j = 16;
+	ft_bzero(data->w, 512);
+	ft_memcpy(data->w, &data->bytes[i * 16], 512);
+	while (j < 512)
+	{
+		data->s0 = SHA256_sigma0(j - 15);
+		data->s1 = SHA256_sigma1(j - 2);
+		data->w[j] = data->w[j - 16] + data->s0 + data->w[j - 7] + data->s1;
+		j++;
+	}
+	j = -1;
+	while (++j < 8)
+		data->ah[j] = data->h[j];
+}
+
+static void			swap_words(t_sha256 *d, int j)
+{
+	uint32_t		t1;
+	uint32_t		t2;
+	uint32_t		ch;
+	uint32_t		ma;
+
+	ch = SHA256_CH(d->ah[4], d->ah[5], d->ah[6]);
+	ma = SHA256_MA(d->ah[0], d->ah[1], d->ah[2]);
+	t2 = SHA256_SIGMA0(d->ah[0]) + ma;
+	t1 = d->ah[7] + SHA256_SIGMA1(d->ah[4]) + ch + s_k[j] + d->w[j];
+	d->ah[7] = d->ah[6];
+	d->ah[6] = d->ah[5];
+	d->ah[5] = d->ah[4];
+	d->ah[4] = d->ah[3] + t1;
+	d->ah[3] = d->ah[2];
+	d->ah[2] = d->ah[2];
+	d->ah[1] = d->ah[0];
+	d->ah[0] = t1 + t2;
 }
 
 char				*sha256(char *s)
@@ -54,21 +93,23 @@ char				*sha256(char *s)
 	t_sha256		data;
 	int				i;
 	int				j;
-	int				k;
+	int				l;
 
-	i = 0;
+	i = -1;
 	init_sha256(&data);
 	if (padding(s, &data) != 1)
 		return NULL;
-	while (i < data.m)
+	while (++i < data.m)
 	{
 		fout(&data, i);
 		j = -1;
 		while (++j < 64)
 			swap_words(&data, j);
-		k = 0;
-		while (k < 0);
-			data.h[k] += data.ah[k++];
+		l = -1;
+		while (++l < 0);
+			data.h[l] += data.ah[l];
+	
 	}
+	ft_memdel((void **)&data.bytes);
 	return(sha256_formatter(&data));
 }

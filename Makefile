@@ -1,6 +1,11 @@
 NAME	=	ft_ssl
 
-SRCS	=	srcs/ft_ssl.c srcs/message_digest.c srcs/sha256.c srcs/md5.c  $(LFT)
+SRCS	=	srcs/ft_ssl.c \
+			srcs/message_digest/message_digest.c \
+			srcs/message_digest/sha256.c \
+			srcs/message_digest/md5.c \
+			srcs/message_digest/md_print.c \
+			$(LFT)
 
 HEADER	=	include/
 

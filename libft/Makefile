@@ -60,7 +60,9 @@ SRC = $(PATH_SRC)ft_strlen.c \
 	$(PATH_SRC)ft_strlenc.c \
 	$(PATH_SRC)ft_arraydel.c \
 	$(PATH_SRC)ft_strlen2.c \
-	$(PATH_SRC)get_next_line.c
+	$(PATH_SRC)get_next_line.c \
+	$(PATH_SRC)ft_itoa_base_extra.c
+	
 
 CFLAGS = -Wall -Wextra -Werror
 

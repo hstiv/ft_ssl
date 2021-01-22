@@ -13,6 +13,7 @@ int				error_option(char *s)
 	{
 		write(1, mdoptions[i], ft_strlen(mdoptions[i]));
 		write(1, "\n", 1);
+		i++;
 	}
 	return (0);
 }
@@ -22,7 +23,6 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 	int			i;
 
 	i = 0;
-
 	while (mdoptions[i] != NULL)
 	{
 		if (!ft_strcmp(mdoptions[i], argv[1]))
@@ -34,8 +34,8 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 
 static void		init_globals(void)
 {
-	mdoptions[0] = ft_strdup("md5\0");
-	mdoptions[1] = ft_strdup("sha256\0");
+	mdoptions[0] = "md5\0";
+	mdoptions[1] = "sha256\0";
 	mdfunc[0] = &md5;
 	mdfunc[1] = &sha256;
 }

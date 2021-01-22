@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <sys/stat.h>
 # include <limits.h>
+# include <stdint.h>
 
 # define BUFF_SIZE 20
 
@@ -81,6 +82,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					get_next_line(const int fd, char **line);
+char				*ft_itoa_base_extra(uint32_t n, int base);
 
 
 #endif

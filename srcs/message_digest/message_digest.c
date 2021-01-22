@@ -1,12 +1,15 @@
 #include "ft_ssl.h"
 
-static int		print_md(char *hash, t_ssl *data)
+static int		print_md(char *msg, t_ssl *data)
 {
-	if (hash == NULL)
+	if (msg == NULL)
 	{
 		ft_putstr("Error: malloc() doesn't work!\n");
 		return (-1);
 	}
+	ft_putstr(msg);
+	ft_putstr("\n");
+	free(msg);
 	return (1);
 }
 
