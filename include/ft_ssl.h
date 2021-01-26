@@ -5,7 +5,7 @@
 # include "md5.h"
 # include "sha256.h"
 
-# define MDPARAMS "pqrs\0"
+# define MDPARAMS "pqrs"
 # define USAGE "usage: ft_ssl command [command opts] [command args]\n"
 
 # define REV_UINT32(n) \
