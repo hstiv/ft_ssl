@@ -34,8 +34,8 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 
 static void		init_globals(void)
 {
-	mdoptions[0] = "md5\0";
-	mdoptions[1] = "sha256\0";
+	mdoptions[0] = "md5";
+	mdoptions[1] = "sha256";
 	mdfunc[0] = &md5;
 	mdfunc[1] = &sha256;
 }
