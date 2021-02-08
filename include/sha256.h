@@ -1,3 +1,4 @@
+
 /* Define the SHA shift, rotate left and rotate right macro */
 # define SHA256_SHR(bits, word) ((word) >> (bits))
 # define SHA256_ROTL(bits, word) \

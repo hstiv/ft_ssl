@@ -1,32 +1,28 @@
 #include "ft_ssl.h"
 
-static int		print_md(char *msg, t_ssl *data)
-{
-	if (msg == NULL)
-	{
-		ft_putstr("Error: malloc() doesn't work!\n");
-		return (EXIT_FAILURE);
-	}
-	ft_putstr(msg);
-	ft_putstr("\n");
-	free(msg);
-	return (EXIT_SUCCESS);
-}
-
 static char		*get_text(int fd)
 {
-	char		*line;
 	char		*s;
+	char		*prev;
+	int			y;
+	char		buff[BLOCK_512 + 1];
 	char		*tmp;
 
-	get_next_line(fd, &s);
-	line = NULL;
-	while (get_next_line(fd, &line) || line)
+	prev = NULL;
+	s = NULL;
+	while ((y = read(fd, buff, BLOCK_512)) > 0)
+	{
+		buff[y] = '\0';
+		(prev != NULL) ? ft_strdel(&prev) : 0;
+		prev = s;
+		s = ft_strdup(buff);
+	}
+	if (prev != NULL)
 	{
 		tmp = s;
-		s = ft_strjoin(s, line);
-		ft_memdel((void **)&tmp);
-		ft_memdel((void **)&line);
+		s = ft_strjoin(prev + ft_strlen(s), s);
+		ft_strdel(&tmp);
+		ft_strdel(&prev);
 	}
 	return (s);
 }
@@ -37,56 +33,59 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 	
 	data->file_name = ft_strdup(argv);
 	if ((fd = open(argv, O_RDONLY)) != -1)
-	{
 		data->input_text = get_text(fd);
-		close(fd);
-	}
-	else
+	else if (data->params[3])
+	{
 		data->input_text = ft_strdup(argv);
-	if (print_md(mdfunc[func_index](data->input_text), data) == EXIT_FAILURE)
-		return (EXIT_FAILURE);
-	ft_memdel((void **)&data->input_text);
-	ft_memdel((void **)&data->file_name);
-	return (EXIT_SUCCESS);
+		(data->file_name) ? ft_strdel(&data->file_name) : 0;
+		data->params[3] = 0;
+	}
+	close(fd);
+	if (!data->input_text)
+	{
+		no_file_err(data, mdoptions[func_index]);
+		(data->file_name) ? ft_strdel(&data->file_name) : 0;
+		return (EXIT_SUCCESS);
+	}
+	return (md_print(mdfunc[func_index](data->input_text), data));
 }
 
-static void		set_opt(t_ssl *data, char c)
+static void		set_options(t_ssl *data, char c)
 {
 	if (c == 'p')
-		data->params[0] == 1;
+		data->params[0] = 1;
 	else if (c == 'q')
-		data->params[1] == 1;
+		data->params[1] = 1;
 	else if (c == 'r')
-		data->params[2] == 1;
+		data->params[2] = 1;
 	else if (c == 's')
-		data->params[3] == 1;
+		data->params[3] = 1;
 }
 
 int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 {
 	int			i;
 
-	printf("Checkpint #1\n");
 	i = 2;
     data->params = (int *)malloc(sizeof(int) * 5);
+	data->func_index = func_index;
 	while (i < argc && argv && argv[i] && argv[i][0] == '-')
 	{
 		argv[i] += 1;
 		while (*argv[i] != '\0')
 		{
 			if (ft_strchr(MDPARAMS, *argv[i]) == NULL)
-				return (EXIT_FAILURE);
-			set_opt(data, *argv[i]);
+				return (ssl_cleaner(data, EXIT_FAILURE)); /* EXIT_FAILURE */
+			set_options(data, *argv[i]);
 			argv[i]++;
 		}
 		i++;
 	}
-	printf("Checkpint #2\n");
-	data->input_text = get_text(1);
-	print_md(mdfunc[func_index](data->input_text), data);
+	if ((data->input_text = get_text(0)) != NULL)
+		md_print(mdfunc[func_index](data->input_text), data);
+	data->params[0] = 0;
 	while (i < argc)
-		if (read_args(argv[i], data, func_index) == -1)
+		if (read_args(argv[i++], data, func_index) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-	ft_memdel((void **)&data->params);
 	return (EXIT_SUCCESS);
 }

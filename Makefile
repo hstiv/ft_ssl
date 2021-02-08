@@ -1,6 +1,7 @@
 NAME	=	ft_ssl
 
 SRCS	=	srcs/ft_ssl.c \
+			srcs/error_handlers.c \
 			srcs/message_digest/message_digest.c \
 			srcs/message_digest/sha256.c \
 			srcs/message_digest/md5.c \
