@@ -2,23 +2,18 @@
 
 static char			*str_filled(char *s, size_t final_size, char filler_symb)
 {
-	int				len;
-	int				i;
+	size_t			len;
 	char			*str;
 
-	i = -1;
+	if (!s || !(str = ft_strnew(final_size)))
+		return (NULL);
 	len = ft_strlen(s);
-	str = (char *)malloc(sizeof(char) * final_size + 1);
-	ft_bzero(str, final_size);
-	if (len < final_size)
-	{
-		while (++i < final_size)
-			str[i] = filler_symb;
-	}
+	ft_memset(str + len, '0', final_size - len);
 	ft_memcpy(str, s, len);
-	ft_memdel((void **)&s);
+	ft_strdel(&s);
 	return (str);
 }
+
 
 char				*md5_formatter(t_md5 *data)
 {
@@ -27,21 +22,15 @@ char				*md5_formatter(t_md5 *data)
 	char			*tmp;
 	
 	i = -1;
-	s = (char *)malloc(sizeof(char) * 33);
-	ft_bzero(s, 32);
-	ft_memdel((void **)&data->bytes);
-	tmp = str_filled(ft_itoa_base_extra(data->a, 16), 8, '0');
-	ft_memcpy(s, tmp, ft_strlen(tmp));
-	ft_memdel((void **)&tmp);
-	tmp = str_filled(ft_itoa_base_extra(data->b, 16), 8, '0');
-	ft_memcpy(s + 8, tmp, ft_strlen(tmp));
-	ft_memdel((void **)&tmp);
-	tmp = str_filled(ft_itoa_base_extra(data->c, 16), 8, '0');
-	ft_memcpy(s + 16, tmp, ft_strlen(tmp));
-	ft_memdel((void **)&tmp);
-	tmp = str_filled(ft_itoa_base_extra(data->d, 16), 8, '0');
-	ft_memcpy(s + 24, tmp, ft_strlen(tmp));
-	ft_memdel((void **)&tmp);
+	if (!(s = ft_strnew(BLOCK_32)))
+		return (NULL);
+	while (++i < 4)
+	{
+		if (!(tmp = str_filled(ft_itoa_base_extra(data->a[i], 16), 8, '0')))
+			return (NULL);
+		ft_memcpy(s + ((i + 1) * 8), tmp, ft_strlen(tmp));
+		ft_strdel(&tmp);
+	}
 	return (s);
 }
 
@@ -52,13 +41,14 @@ char				*sha256_formatter(t_sha256 *data)
 	char			*tmp;
 	
 	i = -1;
-	s = (char *)malloc(sizeof(char) * 65);
-	ft_bzero(s, 64);
+	if (!(s = ft_strnew(BLOCK_64)))
+		return (NULL);
 	while (++i < 8)
 	{
-		tmp = str_filled(ft_itoa_base_extra(data->h[i], 16), 8, '0');
+		if (!(tmp = str_filled(ft_itoa_base_extra(data->h[i], 16), 8, '0')))
+			return (NULL);
 		ft_memcpy(s + ((1 + i) * 8), tmp, ft_strlen(tmp));
-		ft_memdel((void **)&tmp);
+		ft_strdel(&tmp);
 	}
 	return (s);
 }

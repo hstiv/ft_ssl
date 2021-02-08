@@ -5,19 +5,14 @@
 
 typedef struct	s_md5
 {
-	uint32_t	a;
-	uint32_t	b;
-	uint32_t	c;
-	uint32_t	d;
-	uint32_t	aa;
-	uint32_t	bb;
-	uint32_t	cc;
-	uint32_t	dd;
+	uint32_t	a[4];
+	uint32_t	aa[4];
 	int			f;
 	int			g;
 	char		*bytes;
-	char		*m;
+	uint32_t	*m;
 	size_t		length;
+	int			m_cycle;
 }				t_md5;
 
 char			*md5_formatter(t_md5 *data);

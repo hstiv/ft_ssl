@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-const uint32_t k[64] = {
+const uint32_t k[BLOCK_64] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee, 0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be, 0x6b901122, 0xfd987193, 0xa679438e, 0x49b40821, 
 	0xf61e2562, 0xc040b340, 0x265e5a51, 0xe9b6c7aa, 0xd62f105d, 0x02441453, 0xd8a1e681, 0xe7d3fbc8, 
@@ -11,7 +11,7 @@ const uint32_t k[64] = {
 	0x6fa87e4f, 0xfe2ce6e0, 0xa3014314, 0x4e0811a1, 0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
 };
 
-const uint32_t s[64] = {
+const uint32_t s[BLOCK_64] = {
 	7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22,
 	5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20,
 	4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23,
@@ -20,52 +20,53 @@ const uint32_t s[64] = {
 
 static void		init_md5(t_md5 *data)
 {
-	data->a = 0x67452301;
-	data->b = 0xEFCDAB89;
-	data->c = 0x98BADCFE;
-	data->d = 0x10325476;
+	data->a[0] = 0x67452301;
+	data->a[1] = 0xEFCDAB89;
+	data->a[2] = 0x98BADCFE;
+	data->a[3] = 0x10325476;
+	data->m_cycle = 0;
 }
 
 static int		padding_bytes(t_md5 *md5, char *s)
 {
 	md5->length = ft_strlen(s) + 1;
-	while (md5->length % 64 != 56)
+	while (md5->length % BLOCK_64 != 56)
 		md5->length++;
-	if (!(md5->bytes = malloc(sizeof(md5->length + 64))))
-		return (0);
-	ft_bzero(md5->bytes, md5->length + 64);
+	if (!(md5->bytes = ft_strnew(md5->length + BLOCK_64)))
+		return (EXIT_FAILURE);
+	ft_bzero(md5->bytes, md5->length + BLOCK_64);
 	md5->bytes = ft_strcpy(md5->bytes, s);
 	*(uint32_t*)(md5->bytes + ft_strlen(s)) = 128;
 	*(uint32_t*)(md5->bytes + md5->length) = (uint32_t)(8 * ft_strlen(s));
-	return (1);
+	return (EXIT_SUCCESS);
 }
 
 static void		md5_main_cycle(t_md5 *md5, int i)
 {
 	if (0 <= i && i <= 15)
 	{
-		md5->f = F(md5->bb, md5->cc, md5->dd);
+		md5->f = F(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = i;
 	}
 	else if (16 <= i && i <= 31)
 	{
-		md5->f = G(md5->bb, md5->cc, md5->dd);
+		md5->f = G(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = (5 * i + 1) % 16;
 	}
 	else if (32 <= i && i <= 47)
 	{
-		md5->f = G(md5->bb, md5->cc, md5->dd);
+		md5->f = G(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = (3 * i + 5) % 16;
 	}
 	else if (48 <= i && i <= 63)
 	{
-		md5->f = G(md5->bb, md5->cc, md5->dd);
+		md5->f = G(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = (7 * i) % 16;
 	}
-	md5->aa = md5->dd;
-	md5->dd = md5->cc;
-	md5->cc = md5->bb;
-	md5->bb = md5->bb + ((md5->f + md5->aa + k[i] + md5->m[md5->g]) << s[i]);
+	md5->aa[0] = md5->aa[3];
+	md5->aa[3] = md5->aa[2];
+	md5->aa[2] = md5->aa[1];
+	md5->aa[1] = md5->aa[1] + ((md5->f + md5->aa[0] + k[i] + md5->m[md5->g]) << s[i]);
 }
 
 char			*md5(char *s)
@@ -73,24 +74,23 @@ char			*md5(char *s)
 	t_md5		md5;
 	int			i;
 
-	i = -1;
 	init_md5(&md5);
-	if (!padding_bytes(&md5, s))
+	if (padding_bytes(&md5, s) == EXIT_FAILURE)
 		return (NULL);
-	md5.m = md5.bytes;
-	while (md5.m)
+	while (md5.m_cycle < md5.length)
 	{
-		md5.aa = md5.a;
-		md5.bb = md5.b;
-		md5.cc = md5.c;
-		md5.dd - md5.d;
-		while (++i < 64)
-			md5_main_cycle(&md5, i);
-		md5.a += md5.aa;
-		md5.b += md5.bb;
-		md5.c += md5.cc;
-		md5.d += md5.dd;
-		md5.m += 4;
+		md5.m = (uint32_t *)(md5.bytes + md5.m_cycle);
+		i = -1;
+		while (++i < 4)
+			md5.aa[i] = md5.a[i];
+		i = 0;
+		while (i < BLOCK_64)
+			md5_main_cycle(&md5, i++);
+		i = -1;
+		while (++i < 4)
+			md5.a[i] += md5.aa[i];
+		md5.m_cycle += BLOCK_64;
 	}
+	ft_strdel(&md5.bytes);
 	return (md5_formatter(&md5));
 }
