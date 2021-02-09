@@ -16,14 +16,14 @@ static void			init_sha256(t_sha256 *data)
 	int				i;
 
 	i = -1;
-	data->h[0] = 0x6A09E667;
-	data->h[1] = 0xBB67AE85;
-	data->h[2] = 0x3C6EF372;
-	data->h[3] = 0xA54FF53A;
-	data->h[4] = 0x510E527F;
-	data->h[5] = 0x9B05688C;
-	data->h[6] = 0x1F83D9AB;
-	data->h[7] = 0x5BE0CD19;
+	data->h[H0] = 0x6A09E667;
+	data->h[H1] = 0xBB67AE85;
+	data->h[H2] = 0x3C6EF372;
+	data->h[H3] = 0xA54FF53A;
+	data->h[H4] = 0x510E527F;
+	data->h[H5] = 0x9B05688C;
+	data->h[H6] = 0x1F83D9AB;
+	data->h[H7] = 0x5BE0CD19;
 	while (++i < 8)
 		data->ah[i] = data->h[i];
 }	
@@ -78,14 +78,14 @@ static void			swap_words(t_sha256 *d, int j)
 	ch = SHA256_CH(d->ah[4], d->ah[5], d->ah[6]);
 	t2 = SHA256_SIGMA0(d->ah[0]) + ma;
 	t1 = d->ah[7] + SHA256_SIGMA1(d->ah[4]) + ch + s_k[j] + d->w[j];
-	d->ah[7] = d->ah[6];
-	d->ah[6] = d->ah[5];
-	d->ah[5] = d->ah[4];
-	d->ah[4] = d->ah[3] + t1;
-	d->ah[3] = d->ah[2];
-	d->ah[2] = d->ah[2];
-	d->ah[1] = d->ah[0];
-	d->ah[0] = t1 + t2;
+	d->ah[H] = d->ah[G];
+	d->ah[G] = d->ah[F];
+	d->ah[F] = d->ah[E];
+	d->ah[E] = d->ah[D] + t1;
+	d->ah[D] = d->ah[C];
+	d->ah[C] = d->ah[B];
+	d->ah[B] = d->ah[A];
+	d->ah[A] = t1 + t2;
 }
 
 char				*sha256(char *s)

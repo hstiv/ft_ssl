@@ -3,7 +3,7 @@
 # define SHA256_SHR(bits, word) ((word) >> (bits))
 # define SHA256_ROTL(bits, word) \
 (((word) << (bits)) | ((word) >> (32 - (bits))))
-# define SHA256_ROTR(bits,word) \
+# define SHA256_ROTR(bits, word) \
 (((word) >> (bits)) | ((word) << (32 - (bits))))
 # define SHA256_AND(a, b) (a & b)
 
@@ -19,7 +19,17 @@
 # define SHA256_MA(a, b, c) \
 (SHA256_AND(a, b) ^ SHA256_AND(a, c) ^ SHA256_AND(b, c))
 # define SHA256_CH(e, f, g) \
-(SHA256_AND(e, f) ^ SHA256_AND(!e, g))
+(SHA256_AND(e, f) ^ SHA256_AND(~e, g))
+
+# define H0 0
+# define H1 1
+# define H2 2
+# define H3 3
+# define H4 4
+# define H5 5
+# define H6 6
+# define H7 7
+
 
 typedef struct	s_sha256
 {

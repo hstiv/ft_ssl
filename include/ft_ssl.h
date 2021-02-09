@@ -8,6 +8,14 @@
 # define BLOCK_64 64
 # define BLOCK_32 32
 # define BLOCK_512 512
+# define A 0
+# define B 1
+# define C 2
+# define D 3
+# define E 4
+# define F 5
+# define G 6
+# define H 7
 
 # define MDPARAMS "pqrs"
 # define USAGE "usage: ft_ssl command [command opts] [command args]"
@@ -16,8 +24,8 @@
 # define ERR_2 "Message Digest commands:"
 
 # define REV_UINT32(n) \
-(((n >> 24) | ((n & 0xff0000) >> 8) | \
-((n & 0xff00) << 8) | (n << 24)))
+(n >> 24 | ((n & 0xff0000) >> 8) | \
+((n & 0xff00) << 8 ) | n << 24)
 
 # define REV_UINT64(n) \
 (n & 0xff00000000000000) >> 56 \

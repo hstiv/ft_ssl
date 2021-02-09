@@ -3,27 +3,21 @@
 static char		*get_text(int fd)
 {
 	char		*s;
-	char		*prev;
-	int			y;
-	char		buff[BLOCK_512 + 1];
+	char		buff[2];
 	char		*tmp;
+	int			input_size;
 
-	prev = NULL;
-	s = NULL;
-	while ((y = read(fd, buff, BLOCK_512)) > 0)
-	{
-		buff[y] = '\0';
-		(prev != NULL) ? ft_strdel(&prev) : 0;
-		prev = s;
-		s = ft_strdup(buff);
-	}
-	if (prev != NULL)
+	s = ft_strdup(" ");
+	input_size = 0;
+	while (read(fd, buff, 1) > 0)
 	{
 		tmp = s;
-		s = ft_strjoin(prev + ft_strlen(s), s);
+		s = ft_strjoin(s, buff);
 		ft_strdel(&tmp);
-		ft_strdel(&prev);
+		input_size++;
 	}
+	if (input_size == 0)
+		ft_strdel(&s);
 	return (s);
 }
 

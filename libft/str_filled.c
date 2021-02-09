@@ -8,7 +8,7 @@ char				*str_filled(char *s, size_t final_size, char filler_symb)
 	if (!s || !(str = ft_strnew(final_size)))
 		return (NULL);
 	len = ft_strlen(s);
-	ft_memset(str + len, filler_symb, final_size - len);
+	ft_memset(str, filler_symb, final_size);
 	ft_memcpy(str, s, len);
 	ft_strdel(&s);
 	return (str);

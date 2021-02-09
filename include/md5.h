@@ -1,9 +1,14 @@
-# define F(X, Y, Z) ((X & Y) | (!X & Z))
-# define G(X, Y, Z) ((X & Z) | (!Z & Y))
-# define H(X, Y, Z) (X ^ Y ^ Z)
-# define I(X, Y, Z) (Y ^ (X & !Z))
-# define ROTL(bits, word) \
-(((word) << (bits)) | ((word) >> (32 - (bits))))
+# define F_FUNC(X, Y, Z) ((X & Y) | (~X & Z))
+# define G_FUNC(X, Y, Z) ((X & Z) | (Y & ~Z))
+# define H_FUNC(X, Y, Z) (X ^ Y ^ Z)
+# define I_FUNC(X, Y, Z) (Y ^ (X | ~Z))
+# define ROTL(X, N) \
+((X << N) | (X >> (32 - N)))
+
+# define A0 0
+# define B0 1
+# define C0 2
+# define D0 3
 
 typedef struct	s_md5
 {
@@ -13,7 +18,7 @@ typedef struct	s_md5
 	int			g;
 	char		*bytes;
 	uint32_t	*m;
-	size_t		length;
+	uint32_t	length;
 	int			m_cycle;
 	int			tmp;
 }				t_md5;

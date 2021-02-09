@@ -1,47 +1,58 @@
 #include "libft.h"
 
-char	*res(int i, int n, int *convert)
+static int	ft_get_len(uint32_t n, int base)
 {
-	char		*base;
-	char		*res;
+	int i;
 
-	base = "0123456789abcdef";
-	res = ft_strnew(i);
-	i--;
-	if (n == 1)
-		res[0] = '-';
-	while (i >= 0)
+	i = 0;
+	while (n != 0)
 	{
-		res[n] = base[convert[i]];
-		n++;
-		i--;
+		n = n / base;
+		i++;
 	}
-	res[n] = '\0';
-	return (res);
+	return (i);
 }
 
-char	*ft_itoa_base(int value, int base)
+static char	*init(int *i)
 {
-	long int	val;
-	int			i;
-	int			n;
-	int			convert[64];
+	char *cmp;
 
-	val = value;
-	n = 0;
-	if (val < 0)
-	{
-		val *= -1;
-		if (base == 10)
-			n = 1;
-	}
-	i = 0;
-	if (val == 0)
+	cmp = "0123456789abcdef";
+	i[0] = 0;
+	return (cmp);
+}
+
+static char	*free_str(char *str)
+{
+	char *tmp;
+
+	tmp = str;
+	str = ft_strsub(str, 1, ft_strlen(str) - 1);
+	free(tmp);
+	return (str);
+}
+
+char		*ft_itoa_base(uint32_t n, int base)
+{
+	int		i;
+	int		len;
+	char	*str;
+	char	*cmp;
+
+	cmp = init(&i);
+	len = ft_get_len(n, base);
+	if (n == 0)
 		return (ft_strdup("0"));
-	while (val != 0)
+	if (!(str = (char *)malloc(sizeof(char) * (len + 1))))
+		return (NULL);
+	str[len + 1] = 0;
+	while (len + 1)
 	{
-		convert[i++] = val % base;
-		val = val / base;
+		str[len] = cmp[n % base];
+		n = n / base;
+		len--;
 	}
-	return (res(i, n, convert));
+	if (str[0] == '0')
+		str = free_str(str);
+	return (str);
 }
