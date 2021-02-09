@@ -24,20 +24,27 @@ static void		init_md5(t_md5 *data)
 	data->a[1] = 0xEFCDAB89;
 	data->a[2] = 0x98BADCFE;
 	data->a[3] = 0x10325476;
+	data->aa[0] = 0;
+	data->aa[1] = 0;
+	data->aa[2] = 0;
+	data->aa[3] = 0;
 	data->m_cycle = 0;
 }
 
 static int		padding_bytes(t_md5 *md5, char *s)
 {
-	md5->length = ft_strlen(s) + 1;
+	int			len;
+
+	len = ft_strlen(s);
+	md5->length = len + 1;
 	while (md5->length % BLOCK_64 != 56)
 		md5->length++;
 	if (!(md5->bytes = ft_strnew(md5->length + BLOCK_64)))
 		return (EXIT_FAILURE);
 	ft_bzero(md5->bytes, md5->length + BLOCK_64);
 	md5->bytes = ft_strcpy(md5->bytes, s);
-	*(uint32_t*)(md5->bytes + ft_strlen(s)) = 128;
-	*(uint32_t*)(md5->bytes + md5->length) = (uint32_t)(8 * ft_strlen(s));
+	*(uint32_t*)(md5->bytes + len) = 128;
+	*(uint32_t*)(md5->bytes + md5->length) = (uint32_t)(8 * len);
 	return (EXIT_SUCCESS);
 }
 
@@ -55,18 +62,19 @@ static void		md5_main_cycle(t_md5 *md5, int i)
 	}
 	else if (32 <= i && i <= 47)
 	{
-		md5->f = G(md5->aa[1], md5->aa[2], md5->aa[3]);
+		md5->f = H(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = (3 * i + 5) % 16;
 	}
 	else if (48 <= i && i <= 63)
 	{
-		md5->f = G(md5->aa[1], md5->aa[2], md5->aa[3]);
+		md5->f = I(md5->aa[1], md5->aa[2], md5->aa[3]);
 		md5->g = (7 * i) % 16;
 	}
+	md5->f = md5->f + md5->aa[0] + k[i] + md5->m[md5->g];
 	md5->aa[0] = md5->aa[3];
 	md5->aa[3] = md5->aa[2];
 	md5->aa[2] = md5->aa[1];
-	md5->aa[1] = md5->aa[1] + ((md5->f + md5->aa[0] + k[i] + md5->m[md5->g]) << s[i]);
+	md5->aa[1] = md5->aa[1] + (ROTL(md5->f, s[i]));
 }
 
 char			*md5(char *s)
@@ -77,20 +85,22 @@ char			*md5(char *s)
 	init_md5(&md5);
 	if (padding_bytes(&md5, s) == EXIT_FAILURE)
 		return (NULL);
+	printf("*** length = %ld ****\n", md5.length);
 	while (md5.m_cycle < md5.length)
 	{
 		md5.m = (uint32_t *)(md5.bytes + md5.m_cycle);
 		i = -1;
 		while (++i < 4)
 			md5.aa[i] = md5.a[i];
-		i = 0;
-		while (i < BLOCK_64)
-			md5_main_cycle(&md5, i++);
+		i = -1;
+		while (++i < BLOCK_64)
+			md5_main_cycle(&md5, i);
 		i = -1;
 		while (++i < 4)
 			md5.a[i] += md5.aa[i];
 		md5.m_cycle += BLOCK_64;
 	}
+	printf("*** m_cycle = %d ****\n", md5.m_cycle);
 	ft_strdel(&md5.bytes);
 	return (md5_formatter(&md5));
 }

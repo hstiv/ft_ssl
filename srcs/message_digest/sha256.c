@@ -34,16 +34,16 @@ static int			padding(char *s, t_sha256 *data)
 
 	data->length = ft_strlen(s) * 8;
 	data->m = ((data->length + 80) / 512) + 1;
-	if (!(data->bytes = malloc(16 * 4 * data->m)))
-		return (-1);
-	ft_bzero(data->bytes, 16 * 4 * data->m);
+	if (!(data->bytes = malloc(64 * data->m)))
+		return (EXIT_FAILURE);
+	ft_bzero(data->bytes, 64 * data->m);
 	ft_strncpy((char*)data->bytes, s, ft_strlen(s));
-	((char*)data->bytes)[ft_strlen(s)] = 0x80;
+	((char*)data->bytes)[ft_strlen(s)] = 128;
 	i = -1;
-	while (++i < data->m * 16 - 1)
+	while (++i < (data->m * 16) - 1)
 		data->bytes[i] = REV_UINT32(data->bytes[i]);
-	data->bytes[(((data->m * 512) - BLOCK_64) / 32) + 1] = data->length;
-	return (1);
+	data->bytes[(((data->m * 512) - 64) / 32) + 1] = data->length;
+	return (EXIT_SUCCESS);
 }
 
 static void			fout(t_sha256 *data, int i)
@@ -55,7 +55,7 @@ static void			fout(t_sha256 *data, int i)
 	j = 16;
 	ft_bzero(data->w, 512);
 	ft_memcpy(data->w, &data->bytes[i * 16], 512);
-	while (j < 512)
+	while (j < 64)
 	{
 		data->s0 = SHA256_sigma0(j - 15);
 		data->s1 = SHA256_sigma1(j - 2);
@@ -74,8 +74,8 @@ static void			swap_words(t_sha256 *d, int j)
 	uint32_t		ch;
 	uint32_t		ma;
 
-	ch = SHA256_CH(d->ah[4], d->ah[5], d->ah[6]);
 	ma = SHA256_MA(d->ah[0], d->ah[1], d->ah[2]);
+	ch = SHA256_CH(d->ah[4], d->ah[5], d->ah[6]);
 	t2 = SHA256_SIGMA0(d->ah[0]) + ma;
 	t1 = d->ah[7] + SHA256_SIGMA1(d->ah[4]) + ch + s_k[j] + d->w[j];
 	d->ah[7] = d->ah[6];
@@ -97,7 +97,7 @@ char				*sha256(char *s)
 
 	i = -1;
 	init_sha256(&data);
-	if (padding(s, &data) != 1)
+	if (padding(s, &data) == EXIT_FAILURE)
 		return NULL;
 	while (++i < data.m)
 	{
@@ -106,9 +106,9 @@ char				*sha256(char *s)
 		while (++j < 64)
 			swap_words(&data, j);
 		l = -1;
-		while (++l < 0);
+		while (++l < 8);
 			data.h[l] += data.ah[l];
-	
+		ft_bzero(data.w, 512);
 	}
 	ft_memdel((void **)&data.bytes);
 	return(sha256_formatter(&data));

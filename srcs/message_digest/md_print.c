@@ -62,7 +62,7 @@ char				*md5_formatter(t_md5 *data)
 		return (NULL);
 	while (++i < 4)
 	{
-		if (!(tmp = str_filled(ft_itoa_base_extra(data->a[i], 16), 8, '0')))
+		if (!(tmp = str_filled(ft_itoa_base(data->a[i], 16), 8, '0')))
 			return (NULL);
 		ft_memcpy(s + (i * 8), tmp, ft_strlen(tmp));
 		ft_strdel(&tmp);
@@ -81,7 +81,7 @@ char				*sha256_formatter(t_sha256 *data)
 		return (NULL);
 	while (++i < 8)
 	{
-		if (!(tmp = str_filled(ft_itoa_base_extra(data->h[i], 16), 8, '0')))
+		if (!(tmp = str_filled(ft_itoa_base(data->h[i], 16), 8, '0')))
 			return (NULL);
 		ft_memcpy(s + (i * 8), tmp, ft_strlen(tmp));
 		ft_strdel(&tmp);

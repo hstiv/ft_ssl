@@ -61,7 +61,7 @@ SRC = $(PATH_SRC)ft_strlen.c \
 	$(PATH_SRC)ft_arraydel.c \
 	$(PATH_SRC)ft_strlen2.c \
 	$(PATH_SRC)get_next_line.c \
-	$(PATH_SRC)ft_itoa_base_extra.c \
+	$(PATH_SRC)ft_itoa_base.c \
 	$(PATH_SRC)str_filled.c
 
 
