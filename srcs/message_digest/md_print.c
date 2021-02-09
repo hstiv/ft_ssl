@@ -1,12 +1,20 @@
 #include "ft_ssl.h"
 
-static void			print_output(char *msg, t_ssl *data)
+static void			print_stdin(char *msg, t_ssl *data)
 {
 	if (data->params[0])
 	{
 		ft_putendl_fd(data->input_text, 1);
 		ft_putendl_fd(msg, 1);
 	}
+	else
+		ft_putendl_fd(msg, 1);
+}
+
+static void			print_output(char *msg, t_ssl *data)
+{
+	if (data->params[4])
+		print_stdin(msg, data);
 	else if (!data->params[1])
 	{
 		if (!data->params[2])
@@ -25,6 +33,8 @@ static void			print_output(char *msg, t_ssl *data)
 			ft_putendl((data->file_name ? "" : "\""));
 		}
 	}
+	else
+		ft_putendl_fd(msg, 1);
 }
 
 int					md_print(char *msg, t_ssl *data)
@@ -39,20 +49,6 @@ int					md_print(char *msg, t_ssl *data)
 	(data->input_text) ? ft_strdel(&data->input_text) : 0;
 	(data->file_name) ? ft_strdel(&data->file_name) : 0;
 	return (EXIT_SUCCESS);
-}
-
-static char			*str_filled(char *s, size_t final_size, char filler_symb)
-{
-	size_t			len;
-	char			*str;
-
-	if (!s || !(str = ft_strnew(final_size)))
-		return (NULL);
-	len = ft_strlen(s);
-	ft_memset(str + len, '0', final_size - len);
-	ft_memcpy(str, s, len);
-	ft_strdel(&s);
-	return (str);
 }
 
 char				*md5_formatter(t_md5 *data)

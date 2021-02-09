@@ -60,6 +60,23 @@ static void		set_options(t_ssl *data, char c)
 		data->params[2] = 1;
 	else if (c == 's')
 		data->params[3] = 1;
+	data->params[4] = 0;
+}
+
+int				stdin_handler(t_ssl *data, int func_index)
+{
+	char		*tmp;
+
+	if ((data->input_text = get_text(0)) != NULL)
+	{
+		tmp = data->input_text;
+		data->input_text = ft_strtrim(data->input_text);
+		ft_strdel(&tmp);
+		data->params[4] = 1;
+		md_print(mdfunc[func_index](data->input_text), data);
+		data->params[0] = 0;
+		data->params[4] = 0;
+	}
 }
 
 int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
@@ -67,7 +84,7 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 	int			i;
 
 	i = 2;
-    data->params = (int *)malloc(sizeof(int) * 5);
+    data->params = (int *)malloc(sizeof(int) * 6);
 	data->func_index = func_index;
 	while (i < argc && argv && argv[i] && argv[i][0] == '-')
 	{
@@ -81,9 +98,7 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 		}
 		i++;
 	}
-	if ((data->input_text = get_text(0)) != NULL)
-		md_print(mdfunc[func_index](data->input_text), data);
-	data->params[0] = 0;
+	stdin_handler(data, func_index);
 	while (i < argc)
 		if (read_args(argv[i++], data, func_index) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
