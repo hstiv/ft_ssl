@@ -2,8 +2,6 @@
 # define G_FUNC(X, Y, Z) ((X & Z) | (Y & ~Z))
 # define H_FUNC(X, Y, Z) (X ^ Y ^ Z)
 # define I_FUNC(X, Y, Z) (Y ^ (X | ~Z))
-# define ROTL(X, N) \
-((X << N) | (X >> (32 - N)))
 
 # define A0 0
 # define B0 1
@@ -15,7 +13,6 @@ typedef struct	s_md5
 	uint32_t	a[4];
 	uint32_t	aa[4];
 	int			f;
-	int			g;
 	char		*bytes;
 	uint32_t	*m;
 	uint32_t	length;

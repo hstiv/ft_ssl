@@ -24,8 +24,8 @@
 # define ERR_2 "Message Digest commands:"
 
 # define REV_UINT32(n) \
-(n >> 24 | ((n & 0xff0000) >> 8) | \
-((n & 0xff00) << 8 ) | n << 24)
+((n >> 24) | ((n & 0xff0000) >> 8) | \
+((n & 0xff00) << 8) | (n << 24))
 
 # define REV_UINT64(n) \
 (n & 0xff00000000000000) >> 56 \
@@ -36,6 +36,9 @@
 | (n & 0x0000000000ff0000) << 24 \
 | (n & 0x000000000000ff00) << 40 \
 | (n & 0x00000000000000ff) << 56
+
+# define ROTL(X, N) ((X << N) | (X >> (32 - N)))
+# define ROTR(X, N) ((X >> N) | (X << (32 - N)))
 
 typedef struct	s_ssl
 {

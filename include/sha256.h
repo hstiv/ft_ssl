@@ -1,25 +1,17 @@
 
-/* Define the SHA shift, rotate left and rotate right macro */
-# define SHA256_SHR(bits, word) ((word) >> (bits))
-# define SHA256_ROTL(bits, word) \
-(((word) << (bits)) | ((word) >> (32 - (bits))))
-# define SHA256_ROTR(bits, word) \
-(((word) >> (bits)) | ((word) << (32 - (bits))))
-# define SHA256_AND(a, b) (a & b)
-
 /* Define the SHA SIGMA and sigma macros */
-# define SHA256_SIGMA0(word) \
-(SHA256_ROTR(2, word) ^ SHA256_ROTR(13, word) ^ SHA256_ROTR(22, word))
-# define SHA256_SIGMA1(word) \
-(SHA256_ROTR(6, word) ^ SHA256_ROTR(11, word) ^ SHA256_ROTR(25, word))
-# define SHA256_sigma0(word) \
-(SHA256_ROTR(7, word) ^ SHA256_ROTR(18, word) ^ SHA256_SHR(3, word))
-# define SHA256_sigma1(word) \
-(SHA256_ROTR(17, word) ^ SHA256_ROTR(19, word) ^ SHA256_SHR(10, word))
-# define SHA256_MA(a, b, c) \
-(SHA256_AND(a, b) ^ SHA256_AND(a, c) ^ SHA256_AND(b, c))
-# define SHA256_CH(e, f, g) \
-(SHA256_AND(e, f) ^ SHA256_AND(~e, g))
+# define SIGMA0(word) \
+(ROTR(word, 2) ^ ROTR(word, 13) ^ ROTR(word, 13))
+# define SIGMA1(word) \
+(ROTR(word, 6) ^ ROTR(word, 11) ^ ROTR(word, 25))
+# define S0(word) \
+(ROTR(word, 7) ^ ROTR(word, 18) ^ (word >> 3))
+# define S1(word) \
+(ROTR(word, 17) ^ ROTR(word, 19) ^ (word >> 10))
+# define MA(a, b, c) \
+((a & b) ^ (a & c) ^ (b & c))
+# define CH(e, f, g) \
+((e & f) ^ (~e & g))
 
 # define H0 0
 # define H1 1
