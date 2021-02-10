@@ -57,7 +57,7 @@ static void		set_options(t_ssl *data, char c)
 	data->params[4] = 0;
 }
 
-int				stdin_handler(t_ssl *data, int func_index)
+int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 {
 	char		*tmp;
 
@@ -68,6 +68,12 @@ int				stdin_handler(t_ssl *data, int func_index)
 		ft_strdel(&tmp);
 		data->params[4] = 1;
 		md_print(mdfunc[func_index](data->input_text), data);
+		data->params[0] = 0;
+		data->params[4] = 0;
+	}
+	else if (arg_count == 0)
+	{
+		md_print(mdfunc[func_index](""), data);
 		data->params[0] = 0;
 		data->params[4] = 0;
 	}
@@ -92,7 +98,7 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 		}
 		i++;
 	}
-	stdin_handler(data, func_index);
+	stdin_handler(data, func_index, argc - i);
 	while (i < argc)
 		if (read_args(argv[i++], data, func_index) == EXIT_FAILURE)
 			return (EXIT_FAILURE);

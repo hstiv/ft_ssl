@@ -29,7 +29,7 @@ int				main(int argc, char **argv)
 	int			len;
 
 	init_ssl(&data);
-	if (argc < 1)
+	if (argc < 2)
 	{
 		ft_putendl_fd(USAGE, 2);
 		return (EXIT_FAILURE);
