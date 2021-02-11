@@ -62,11 +62,7 @@ char				*md5_formatter(t_md5 *data)
 		return (NULL);
 	while (++i < E)
 	{
-<<<<<<< HEAD
 		if (!(tmp = str_filled(ft_itoa_base(REV_UINT32(data->a[i]), 16), 8, '0')))
-=======
-		if (!(tmp = str_filled(ft_itoa_base(REV_UINT32(data->a[i]), 16), 8, 48)))
->>>>>>> 5fda919f5f495b945d17d76c6772eb494f2eb50b
 			return (NULL);
 		ft_memcpy(s + (i * 8), tmp, ft_strlen(tmp));
 		ft_strdel(&tmp);

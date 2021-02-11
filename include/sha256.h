@@ -1,7 +1,7 @@
 
 /* Define the SHA SIGMA and sigma macros */
 # define SIGMA0(word) \
-(ROTR(word, 2) ^ ROTR(word, 13) ^ ROTR(word, 13))
+(ROTR(word, 2) ^ ROTR(word, 13) ^ ROTR(word, 22))
 # define SIGMA1(word) \
 (ROTR(word, 6) ^ ROTR(word, 11) ^ ROTR(word, 25))
 # define S0(word) \

@@ -16,6 +16,7 @@
 # define F 5
 # define G 6
 # define H 7
+# define I 8
 
 # define MDPARAMS "pqrs"
 # define USAGE "usage: ft_ssl command [command opts] [command args]"
