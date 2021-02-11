@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-const uint32_t k[BLOCK_64] = {
+static const uint32_t k[BLOCK_64] = {
 	0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5, 
 	0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
 	0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3, 
@@ -32,7 +32,7 @@ static void			init_sha256(t_sha256 *data)
 	data->h[H5] = 0x9B05688C;
 	data->h[H6] = 0x1F83D9AB;
 	data->h[H7] = 0x5BE0CD19;
-	while (++i < 8)
+	while (++i < I)
 		data->ah[i] = data->h[i];
 }	
 
@@ -59,7 +59,7 @@ static void			fout(t_sha256 *data, int i)
 
 	j = 15;
 	ft_bzero(data->w, BLOCK_512);
-	ft_memcpy(data->w, &data->bytes[i * 16], BLOCK_512);
+	ft_memcpy(data->w, data->bytes + (i * 16), BLOCK_512);
 	while (++j < BLOCK_64)
 		data->w[j] = data->w[j - 16] + S0(j - 15) + data->w[j - 7] + S1(j - 2);
 }
@@ -102,13 +102,12 @@ char				*sha256(char *s)
 	{
 		fout(&data, i);
 		l = -1;
-		while (++l < H)
+		while (++l < I)
 			data.ah[l] = data.h[l];
 		swap_words(&data);
 		l = -1;
-		while (++l < H);
+		while (++l < I)
 			data.h[l] += data.ah[l];
-		ft_bzero(data.w, BLOCK_512);
 	}
 	ft_memdel((void **)&data.bytes);
 	return(sha256_formatter(&data));

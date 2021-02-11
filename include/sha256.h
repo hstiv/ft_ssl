@@ -11,7 +11,7 @@
 # define MA(a, b, c) \
 ((a & b) ^ (a & c) ^ (b & c))
 # define CH(e, f, g) \
-((e & f) ^ (~e & g))
+((e & f) ^ (~ e & g))
 
 # define H0 0
 # define H1 1
