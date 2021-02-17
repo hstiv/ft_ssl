@@ -52,12 +52,11 @@ static int		padding_bytes(t_md5 *md5, char *s)
 	md5->length = len + 1;
 	while (md5->length % BLOCK_64 != 56)
 		md5->length++;
-	if (!(md5->bytes = ft_strnew(md5->length + 8)))
+	if (!(md5->bytes = ft_strnew(md5->length + BLOCK_64)))
 		return (EXIT_FAILURE);
-	md5->bytes = ft_strcpy(md5->bytes, s);
+	md5->bytes = ft_strcpy((char *)md5->bytes, s);
 	*(uint32_t*)(md5->bytes + len) = 128;
 	*(uint32_t*)(md5->bytes + md5->length) = (uint32_t)(8 * len);
-	md5->length += 8;
 	return (EXIT_SUCCESS);
 }
 

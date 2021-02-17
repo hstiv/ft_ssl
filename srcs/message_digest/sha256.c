@@ -32,36 +32,57 @@ static void			init_sha256(t_sha256 *data)
 	data->h[H5] = 0x9B05688C;
 	data->h[H6] = 0x1F83D9AB;
 	data->h[H7] = 0x5BE0CD19;
-	while (++i < I)
-		data->ah[i] = data->h[i];
 }	
 
 static int			padding(char *s, t_sha256 *data)
 {
 	int				i;
+	// int				len;
+	// uint32_t		bits;
 
 	data->length = ft_strlen(s) * 8;
-	data->m = ((data->length + 80) / BLOCK_512) + 1;
-	if (!(data->bytes = (uint32_t *)ft_memalloc(64 * data->m)))
+	data->m = ((data->length + 80) / 512) + 1;
+	if (!(data->bytes = (uint32_t *)ft_memalloc(data->m * BLOCK_64)))
 		return (EXIT_FAILURE);
-	ft_memcpy(data->bytes, s, ft_strlen(s));
-	((char*)data->bytes)[ft_strlen(s)] = 128;
+	ft_memcpy((char *)data->bytes, s, ft_strlen(s));
+	((char *)data->bytes)[ft_strlen(s)] = 128;
 	i = -1;
 	while (++i < (data->m * 16) - 1)
 		data->bytes[i] = REV_UINT32(data->bytes[i]);
-	data->bytes[(((data->m * 512) - 64) / 32) + 1] = data->length;
+	data->bytes[((data->m * 512 - 64) / 32) + 1] = data->length;
+	// len = ft_strlen(s);
+	// data->length = len + 9;
+	// while (data->length % BLOCK_64)
+	// 	data->length++;
+	// if (!(data->bytes = (uint32_t *)ft_memalloc(data->length)))
+	// 	return (EXIT_FAILURE);
+	// ft_memcpy(data->bytes, s, len);
+	// data->bytes[len] = 128;
+	// bits = len * 8;
+	// i = -1;
+	// while (++i < (data->length - 8) / 4)
+	// 	data->bytes[i] = REV_UINT32(data->bytes[i]);
+	// data->m = data->length / BLOCK_64;
+	// ft_memcpy(data->bytes + data->length - 4, &bits, 4);
 	return (EXIT_SUCCESS);
 }
 
 static void			fout(t_sha256 *data, int i)
 {
 	int				j;
+	uint32_t		s0;
+	uint32_t		s1;
 
-	j = 15;
+	j = 16;
 	ft_bzero(data->w, BLOCK_512);
 	ft_memcpy(data->w, data->bytes + (i * 16), BLOCK_512);
-	while (++j < BLOCK_64)
-		data->w[j] = data->w[j - 16] + S0(j - 15) + data->w[j - 7] + S1(j - 2);
+	while (j < BLOCK_64)
+	{
+		s0 = S0(data->w[j - 15]);
+		s1 = S1(data->w[j - 2]);
+		data->w[j] = data->w[j - 16] + s0 + data->w[j - 7] + s1;
+		j++;
+	}
 }
 
 static void			swap_words(t_sha256 *d)
@@ -71,6 +92,9 @@ static void			swap_words(t_sha256 *d)
 	uint32_t		ch;
 	int				i;
 
+	i = -1;
+	while (++i <= H)
+		d->ah[i] = d->h[i];
 	i = -1;
 	while (++i < BLOCK_64)
 	{
@@ -86,13 +110,15 @@ static void			swap_words(t_sha256 *d)
 		d->ah[B] = d->ah[A];
 		d->ah[A] = t1 + t2;
 	}
+	i = -1;
+	while (++i <= H)
+		d->h[i] += d->ah[i];
 }
 
 char				*sha256(char *s)
 {
 	t_sha256		data;
 	int				i;
-	int				l;
 
 	i = -1;
 	init_sha256(&data);
@@ -101,13 +127,7 @@ char				*sha256(char *s)
 	while (++i < data.m)
 	{
 		fout(&data, i);
-		l = -1;
-		while (++l < I)
-			data.ah[l] = data.h[l];
 		swap_words(&data);
-		l = -1;
-		while (++l < I)
-			data.h[l] += data.ah[l];
 	}
 	ft_memdel((void **)&data.bytes);
 	return(sha256_formatter(&data));

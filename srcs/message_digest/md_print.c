@@ -4,7 +4,7 @@ static void			print_stdin(char *msg, t_ssl *data)
 {
 	if (data->params[0])
 	{
-		ft_putendl_fd(data->input_text, 1);
+		ft_putendl_fd(data->file_name, 1);
 		ft_putendl_fd(msg, 1);
 	}
 	else
@@ -62,7 +62,7 @@ char				*md5_formatter(t_md5 *data)
 		return (NULL);
 	while (++i < E)
 	{
-		if (!(tmp = str_filled(ft_itoa_base(REV_UINT32(data->a[i]), 16), 8, '0')))
+		if (!(tmp = str_filled(ft_itoa_base(REV_UINT32(data->a[i]), 16), 8, '0', "end")))
 			return (NULL);
 		ft_memcpy(s + (i * 8), tmp, ft_strlen(tmp));
 		ft_strdel(&tmp);
@@ -81,7 +81,7 @@ char				*sha256_formatter(t_sha256 *data)
 		return (NULL);
 	while (++i < I)
 	{
-		if (!(tmp = str_filled(ft_itoa_base(data->h[i], 16), 8, '0')))
+		if (!(tmp = str_filled(ft_itoa_base(data->h[i], 16), 8, '0', "beginning")))
 			return (NULL);
 		ft_memcpy(s + (i * 8), tmp, ft_strlen(tmp));
 		ft_strdel(&tmp);

@@ -83,6 +83,6 @@ int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					get_next_line(const int fd, char **line);
 char				*ft_itoa_base(uint32_t n, int base);
-char				*str_filled(char *s, size_t final_size, char filler_symb);
+char				*str_filled(char *s, size_t final_size, char filler_symb, char *position);
 
 #endif

@@ -7,14 +7,13 @@ static char		*get_text(int fd)
 	char		*tmp;
 	int			input_size;
 
-	s = ft_strdup(" ");
+	s = ft_strdup("");
 	input_size = 0;
-	while (read(fd, buff, 1) > 0)
+	while ((input_size += read(fd, buff, 1)) > 0)
 	{
 		tmp = s;
 		s = ft_strjoin(s, buff);
 		ft_strdel(&tmp);
-		input_size++;
 	}
 	if (input_size == 0)
 		ft_strdel(&s);
@@ -27,7 +26,10 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 	
 	data->file_name = ft_strdup(argv);
 	if ((fd = open(argv, O_RDONLY)) != -1)
+	{
 		data->input_text = get_text(fd);
+		printf("%s\n", data->input_text);
+	}	
 	else if (data->params[3])
 	{
 		data->input_text = ft_strdup(argv);
@@ -59,13 +61,9 @@ static void		set_options(t_ssl *data, char c)
 
 int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 {
-	char		*tmp;
-
 	if ((data->input_text = get_text(0)) != NULL)
 	{
-		tmp = data->input_text;
-		data->input_text = ft_strtrim(data->input_text);
-		ft_strdel(&tmp);
+		data->file_name = ft_strtrim(data->input_text);
 		data->params[4] = 1;
 		md_print(mdfunc[func_index](data->input_text), data);
 		data->params[0] = 0;
