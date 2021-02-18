@@ -18,6 +18,12 @@
 # define H 7
 # define I 8
 
+# define _P 0
+# define _Q 1
+# define _R 2
+# define _S 3
+
+
 # define MDPARAMS "pqrs"
 # define USAGE "usage: ft_ssl command [command opts] [command args]"
 # define ERR_1_1 "ft_ssl: Error: \'"

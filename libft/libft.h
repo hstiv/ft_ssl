@@ -23,6 +23,8 @@
 # include <limits.h>
 # include <stdint.h>
 
+# define W_END "end"
+# define W_BEGIN "beginning"
 # define BUFF_SIZE 20
 
 void				ft_arraydel(void **array);

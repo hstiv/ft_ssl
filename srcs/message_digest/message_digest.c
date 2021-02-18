@@ -3,17 +3,19 @@
 static char		*get_text(int fd)
 {
 	char		*s;
-	char		buff[2];
+	char		buff[3];
 	char		*tmp;
 	int			input_size;
 
 	s = ft_strdup("");
 	input_size = 0;
-	while ((input_size += read(fd, buff, 1)) > 0)
+	while (read(fd, buff, 1) > 0)
 	{
 		tmp = s;
+		buff[1] = '\0';
 		s = ft_strjoin(s, buff);
 		ft_strdel(&tmp);
+		input_size++;
 	}
 	if (input_size == 0)
 		ft_strdel(&s);
@@ -28,7 +30,6 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 	if ((fd = open(argv, O_RDONLY)) != -1)
 	{
 		data->input_text = get_text(fd);
-		printf("%s\n", data->input_text);
 	}	
 	else if (data->params[3])
 	{
@@ -48,20 +49,20 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 
 static void		set_options(t_ssl *data, char c)
 {
-	if (c == 'p')
-		data->params[0] = 1;
-	else if (c == 'q')
-		data->params[1] = 1;
-	else if (c == 'r')
-		data->params[2] = 1;
-	else if (c == 's')
-		data->params[3] = 1;
+	if (c == 'p' || c == 'P')
+		data->params[_P] = 1;
+	else if (c == 'q' || c == 'Q')
+		data->params[_Q] = 1;
+	else if (c == 'r' || c == 'R')
+		data->params[_R] = 1;
+	else if (c == 's' || c == 'S')
+		data->params[_S] = 1;
 	data->params[4] = 0;
 }
 
 int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 {
-	if ((data->input_text = get_text(0)) != NULL)
+	if ((data->input_text = get_text(0)) != NULL && (data->params[_P] || !arg_count))
 	{
 		data->file_name = ft_strtrim(data->input_text);
 		data->params[4] = 1;
