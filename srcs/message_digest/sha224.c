@@ -19,22 +19,22 @@ static const uint32_t k[BLOCK_64] = {
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
 };
 
-static void			init_sha256(t_sha256 *data)
+static void			init_sha224(t_sha224 *data)
 {
 	int				i;
 
 	i = -1;
-	data->h[H0] = 0x6A09E667;
-	data->h[H1] = 0xBB67AE85;
-	data->h[H2] = 0x3C6EF372;
-	data->h[H3] = 0xA54FF53A;
-	data->h[H4] = 0x510E527F;
-	data->h[H5] = 0x9B05688C;
-	data->h[H6] = 0x1F83D9AB;
-	data->h[H7] = 0x5BE0CD19;
+	data->h[H0] = 0xC1059ED8;
+	data->h[H1] = 0x367CD507;
+	data->h[H2] = 0x3070DD17;
+	data->h[H3] = 0xF70E5939;
+	data->h[H4] = 0xFFC00B31;
+	data->h[H5] = 0x68581511;
+	data->h[H6] = 0x64F98FA7;
+	data->h[H7] = 0xBEFA4FA4;
 }	
 
-static int			padding(char *s, t_sha256 *data)
+static int			padding(char *s, t_sha224 *data)
 {
 	int				i;
 
@@ -51,7 +51,7 @@ static int			padding(char *s, t_sha256 *data)
 	return (EXIT_SUCCESS);
 }
 
-static void			fout(t_sha256 *data, int i)
+static void			fout(t_sha224 *data, int i)
 {
 	int				j;
 	uint32_t		s0;
@@ -69,7 +69,7 @@ static void			fout(t_sha256 *data, int i)
 	}
 }
 
-static void			swap_words(t_sha256 *d)
+static void			swap_words(t_sha224 *d)
 {
 	uint32_t		t1;
 	uint32_t		t2;
@@ -99,13 +99,13 @@ static void			swap_words(t_sha256 *d)
 		d->h[i] += d->ah[i];
 }
 
-char				*sha256(char *s)
+char				*sha224(char *s)
 {
-	t_sha256		data;
+	t_sha224		data;
 	int				i;
 
 	i = -1;
-	init_sha256(&data);
+	init_sha224(&data);
 	if (padding(s, &data) == EXIT_FAILURE)
 		return NULL;
 	while (++i < data.m)
@@ -114,5 +114,5 @@ char				*sha256(char *s)
 		swap_words(&data);
 	}
 	ft_memdel((void **)&data.bytes);
-	return(sha256_formatter(&data));
+	return(sha224_formatter(&data));
 }

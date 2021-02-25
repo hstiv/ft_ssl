@@ -25,7 +25,7 @@
 
 # define W_END "end"
 # define W_BEGIN "beginning"
-# define BUFF_SIZE 20
+# define BUFF_SIZE 1
 
 void				ft_arraydel(void **array);
 size_t				ft_strlenc(char const *s, char c);
@@ -61,7 +61,7 @@ void				*ft_memccpy(void *d, const void *s, int c, size_t n);
 void				*ft_memmove(void *dest, const void *source, size_t len);
 int					ft_memcmp(const void *str1, const void *str2, size_t n);
 size_t				ft_strlen(const char *s);
-size_t				ft_strlen2(const char *s);
+size_t				ft_strlen2(const char **s);
 char				*ft_strdup(const char *s1);
 char				*ft_strcpy(char *dst, const char *src);
 char				*ft_strncpy(char *dst, const char *src, size_t len);
@@ -84,7 +84,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					get_next_line(const int fd, char **line);
-char				*ft_itoa_base(uint32_t n, int base);
+char				*ft_itoa_base(uint64_t n, int base);
 char				*str_filled(char *s, size_t final_size, char filler_symb, char *position);
 
 #endif

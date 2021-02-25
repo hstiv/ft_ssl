@@ -20,4 +20,5 @@ typedef struct	s_md5
 	int			tmp;
 }				t_md5;
 
+char			*md5(char *s);
 char			*md5_formatter(t_md5 *data);

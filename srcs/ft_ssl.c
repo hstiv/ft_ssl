@@ -15,9 +15,14 @@ static void		init_ssl(t_ssl *data)
 {
 	mdoptions[0] = "md5";
 	mdoptions[1] = "sha256";
-	mdoptions[2] = NULL;
+	mdoptions[2] = "sha224";
+	mdoptions[3] = "sha512";
+	mdoptions[4] = NULL;
 	mdfunc[0] = &md5;
 	mdfunc[1] = &sha256;
+	mdfunc[2] = &sha224;
+	mdfunc[3] = &sha512;
+	mdfunc[4] = NULL;	
 	data->params = NULL;
 	data->input_text = NULL;
 	data->file_name = NULL;
@@ -26,13 +31,26 @@ static void		init_ssl(t_ssl *data)
 int				main(int argc, char **argv)
 {
 	t_ssl		data;
-	int			len;
+	char		*line;
 
 	init_ssl(&data);
 	if (argc < 2)
 	{
 		ft_putendl_fd(USAGE, 2);
-		return (EXIT_FAILURE);
+		
+		// while (42)
+		// {
+		// 	printf("SSL> ");
+		// 	line = NULL;
+		// 	if (get_next_line(0, &line) > 0)
+		// 	{
+		// 	// 	// parse_params(argc, argv, &data);
+		// 	// 	printf("|%s|\n", line);
+		// 	// 	ft_strdel(&line);
+		// 	}
+		// 	break ;
+		// }
+		return (EXIT_FAILURE);		
 	}
 	return (parse_params(argc, argv, &data));
 }

@@ -1,6 +1,6 @@
 #include "libft.h"
 
-static int	ft_get_len(uint32_t n, int base)
+static int	ft_get_len(uint64_t n, int base)
 {
 	int i;
 
@@ -32,7 +32,7 @@ static char	*free_str(char *str)
 	return (str);
 }
 
-char		*ft_itoa_base(uint32_t n, int base)
+char		*ft_itoa_base(uint64_t n, int base)
 {
 	int		i;
 	int		len;
