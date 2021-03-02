@@ -1,7 +1,4 @@
-# define F_FUNC(X, Y, Z) ((X & Y) | (~X & Z))
-# define G_FUNC(X, Y, Z) ((X & Z) | (Y & ~Z))
-# define H_FUNC(X, Y, Z) (X ^ Y ^ Z)
-# define I_FUNC(X, Y, Z) (Y ^ (X | ~Z))
+#include <stdint.h>
 
 # define A0 0
 # define B0 1
@@ -12,13 +9,16 @@ typedef struct	s_md5
 {
 	uint32_t	a[4];
 	uint32_t	aa[4];
-	int			f;
+	uint32_t	f;
 	char		*bytes;
 	uint32_t	*m;
 	uint32_t	length;
 	int			m_cycle;
-	int			tmp;
 }				t_md5;
 
 char			*md5(char *s);
 char			*md5_formatter(t_md5 *data);
+uint32_t		f_func(uint32_t x, uint32_t y, uint32_t z);
+uint32_t		g_func(uint32_t x, uint32_t y, uint32_t z);
+uint32_t		h_func(uint32_t x, uint32_t y, uint32_t z);
+uint32_t		i_func(uint32_t x, uint32_t y, uint32_t z);

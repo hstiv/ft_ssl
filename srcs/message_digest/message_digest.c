@@ -28,14 +28,12 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 	
 	data->file_name = ft_strdup(argv);
 	if ((fd = open(argv, O_RDONLY)) != -1)
-	{
 		data->input_text = get_text(fd);
-	}	
-	else if (data->params[3])
+	else if (data->params[_S])
 	{
 		data->input_text = ft_strdup(argv);
 		(data->file_name) ? ft_strdel(&data->file_name) : 0;
-		data->params[3] = 0;
+		data->params[_S] = 0;
 	}
 	close(fd);
 	if (!data->input_text)
@@ -57,43 +55,44 @@ static void		set_options(t_ssl *data, char c)
 		data->params[_R] = 1;
 	else if (c == 's' || c == 'S')
 		data->params[_S] = 1;
-	data->params[4] = 0;
+	data->params[STDIN_MODE] = 0;
 }
 
 int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 {
-	if ((data->input_text = get_text(0)) != NULL && (data->params[_P] || !arg_count))
+	if (!data->params[BASH_MODE] && (data->input_text = get_text(0)) != NULL
+		&& (data->params[_P] || !arg_count))
 	{
 		data->file_name = ft_strtrim(data->input_text);
-		data->params[4] = 1;
+		data->params[STDIN_MODE] = 1;
 		md_print(mdfunc[func_index](data->input_text), data);
-		data->params[0] = 0;
-		data->params[4] = 0;
+		data->params[_P] = 0;
+		data->params[STDIN_MODE] = 0;
 	}
 	else if (arg_count == 0)
 	{
 		md_print(mdfunc[func_index](""), data);
-		data->params[0] = 0;
-		data->params[4] = 0;
+		data->params[_P] = 0;
+		data->params[STDIN_MODE] = 0;
 	}
 }
 
 int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 {
 	int			i;
+	int			j;
 
 	i = 2;
-    data->params = (int *)malloc(sizeof(int) * 6);
 	data->func_index = func_index;
 	while (i < argc && argv && argv[i] && argv[i][0] == '-')
 	{
-		argv[i] += 1;
-		while (*argv[i] != '\0')
+		j = 1;
+		while (argv[i][j] != '\0')
 		{
-			if (ft_strchr(MDPARAMS, *argv[i]) == NULL)
+			if (ft_strchr(MDPARAMS, argv[i][j]) == NULL)
 				return (ssl_cleaner(data, EXIT_FAILURE)); /* EXIT_FAILURE */
-			set_options(data, *argv[i]);
-			argv[i]++;
+			set_options(data, argv[i][j]);
+			j++;
 		}
 		i++;
 	}

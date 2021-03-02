@@ -62,7 +62,11 @@ SRC = $(PATH_SRC)ft_strlen.c \
 	$(PATH_SRC)ft_strlen2.c \
 	$(PATH_SRC)get_next_line.c \
 	$(PATH_SRC)ft_itoa_base.c \
-	$(PATH_SRC)str_filled.c
+	$(PATH_SRC)str_filled.c \
+	$(PATH_SRC)rev_uint32.c \
+	$(PATH_SRC)rev_uint64.c \
+	$(PATH_SRC)rotr32.c \
+	$(PATH_SRC)rotl32.c \
 
 
 CFLAGS = -Wall -Wextra -Werror

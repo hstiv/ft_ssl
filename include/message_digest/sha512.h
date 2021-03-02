@@ -1,17 +1,4 @@
-# define ROTR_512(X, N) ((X >> N) | (X << (64 - N)))
-
-# define SIGMA0_512(word) \
-(ROTR(word, 28) ^ ROTR(word, 34) ^ ROTR(word, 39))
-# define SIGMA1_512(word) \
-(ROTR_512(word, 14) ^ ROTR_512(word, 18) ^ ROTR_512(word, 41))
-# define S0_512(word) \
-(ROTR_512(word, 1) ^ ROTR_512(word, 8) ^ (word >> 7))
-# define S1_512(word) \
-(ROTR_512(word, 19) ^ ROTR_512(word, 61) ^ (word >> 6))
-# define MA_512(a, b, c) \
-((a & b) ^ (a & c) ^ (b & c))
-# define CH_512(e, f, g) \
-((e & f) ^ (~e & g))
+#include <stdint.h>
 
 typedef struct	s_sha512
 {
@@ -27,3 +14,11 @@ typedef struct	s_sha512
 
 char			*sha512(char *s);
 char			*sha512_formatter(t_sha512 *data);
+uint64_t		rotr_512(uint64_t x, uint64_t n);
+uint64_t		sigma0_512(uint64_t word);
+uint64_t		sigma1_512(uint64_t word);
+uint64_t		s0_512(uint64_t word);
+uint64_t		s1_512(uint64_t word);
+uint64_t		ma_512(uint64_t a, uint64_t b, uint64_t c);
+uint64_t		ch_512(uint64_t e, uint64_t f, uint64_t g);
+

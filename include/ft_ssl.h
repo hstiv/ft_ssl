@@ -31,6 +31,8 @@
 # define _Q 1
 # define _R 2
 # define _S 3
+# define STDIN_MODE 4
+# define BASH_MODE 15
 
 
 # define MDPARAMS "pqrs"
@@ -39,26 +41,9 @@
 # define ERR_1_2 "\' is an invalid command.\n"
 # define ERR_2 "Message Digest commands:"
 
-# define REV_UINT32(n) \
-((n >> 24) | ((n & 0xff0000) >> 8) | \
-((n & 0xff00) << 8) | (n << 24))
-
-# define REV_UINT64(n) \
-(n & 0xff00000000000000) >> 56 \
-| (n & 0x00ff000000000000) >> 40 \
-| (n & 0x0000ff0000000000) >> 24 \
-| (n & 0x000000ff00000000) >> 8 \
-| (n & 0x00000000ff000000) << 8 \
-| (n & 0x0000000000ff0000) << 24 \
-| (n & 0x000000000000ff00) << 40 \
-| (n & 0x00000000000000ff) << 56
-
-# define ROTL(X, N) ((X << N) | (X >> (32 - N)))
-# define ROTR(X, N) ((X >> N) | (X << (32 - N)))
-
 typedef struct	s_ssl
 {
-    int         *params;
+    int         params[20];
     char        *file_name;
     char        *input_text;
 	int			func_index;
