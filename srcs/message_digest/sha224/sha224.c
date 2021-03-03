@@ -21,9 +21,6 @@ static const uint32_t k[BLOCK_64] = {
 
 static void			init_sha224(t_sha224 *data)
 {
-	int				i;
-
-	i = -1;
 	data->h[H0] = 0xC1059ED8;
 	data->h[H1] = 0x367CD507;
 	data->h[H2] = 0x3070DD17;

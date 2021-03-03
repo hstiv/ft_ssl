@@ -65,16 +65,21 @@ int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 	{
 		data->file_name = ft_strtrim(data->input_text);
 		data->params[STDIN_MODE] = 1;
-		md_print(mdfunc[func_index](data->input_text), data);
+		if ((md_print(mdfunc[func_index](data->input_text), data))
+			== EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		data->params[_P] = 0;
 		data->params[STDIN_MODE] = 0;
 	}
 	else if (arg_count == 0)
 	{
-		md_print(mdfunc[func_index](""), data);
+		if ((md_print(mdfunc[func_index](""), data))
+			== EXIT_FAILURE)
+			return (EXIT_FAILURE);
 		data->params[_P] = 0;
 		data->params[STDIN_MODE] = 0;
 	}
+	return (EXIT_SUCCESS);
 }
 
 int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)

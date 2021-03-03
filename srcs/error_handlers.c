@@ -7,6 +7,7 @@ int				no_file_err(t_ssl *data, char *func_name)
 	ft_putstr(": ");
 	ft_putstr(data->file_name);
 	ft_putendl_fd(": No such file or directory", 2);
+	return (ssl_cleaner(data, EXIT_FAILURE));
 }
 
 int				ssl_cleaner(t_ssl *data, int exit_result)

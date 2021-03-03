@@ -21,9 +21,6 @@ static const uint32_t k[BLOCK_64] = {
 
 static void			init_sha256(t_sha256 *data)
 {
-	int				i;
-
-	i = -1;
 	data->h[H0] = 0x6A09E667;
 	data->h[H1] = 0xBB67AE85;
 	data->h[H2] = 0x3C6EF372;

@@ -13,7 +13,7 @@ typedef struct	s_md5
 	char		*bytes;
 	uint32_t	*m;
 	uint32_t	length;
-	int			m_cycle;
+	uint32_t	m_cycle;
 }				t_md5;
 
 char			*md5(char *s);

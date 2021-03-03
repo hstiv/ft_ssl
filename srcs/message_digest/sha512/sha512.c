@@ -25,9 +25,6 @@ static const uint64_t k[80] = {
 
 static void			init_sha512(t_sha512 *data)
 {
-	int				i;
-
-	i = -1;
 	data->h[H0] = 0x6a09e667f3bcc908;
 	data->h[H1] = 0xbb67ae8584caa73b;
 	data->h[H2] = 0x3c6ef372fe94f82b;
