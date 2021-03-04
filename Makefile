@@ -15,12 +15,15 @@ SRC					=	srcs/ft_ssl.c \
 						srcs/message_digest/sha512/sha512.c \
 						srcs/message_digest/sha512/main_cycle_funcs.c \
 						srcs/message_digest/sha512/additional_funcs.c \
+						srcs/cipher/base64/base64.c \
 						$(LFT)
 
 
 INC					=	includes/
 
 INC_MD				=	includes/message_digest/
+
+INC_CP				=	includes/cipher/
 
 LIB_NAME			=	libft.a
 
@@ -38,7 +41,7 @@ $(LFT):
 
 $(NAME):
 						@gcc -o $(NAME) -Wall -Wextra -Werror \
-						$(SRC) -I $(INC) -I $(INC_MD) -I $(LIB_INC_PATH)
+						$(SRC) -I $(INC) -I $(INC_MD) -I $(INC_CP) -I $(LIB_INC_PATH)
 						@echo "(•̀ᴗ•́)و $(NAME) generated!"
 
 clean:

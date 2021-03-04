@@ -10,7 +10,7 @@ static const char	*opt[5] = {
 
 static void			print_stdin(char *msg, t_ssl *data)
 {
-	if (data->params[_P])
+	if (data->params[P])
 	{
 		ft_putendl_fd(data->file_name, 1);
 		ft_putendl_fd(msg, 1);
@@ -23,9 +23,9 @@ static void			print_output(char *msg, t_ssl *data)
 {
 	if (data->params[STDIN_MODE])
 		print_stdin(msg, data);
-	else if (!data->params[_Q])
+	else if (!data->params[Q])
 	{
-		if (!data->params[_R])
+		if (!data->params[R])
 		{
 			ft_putstr((opt[data->func_index]));
 			ft_putstr((data->file_name ? " (" : " (\""));

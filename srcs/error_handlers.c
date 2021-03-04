@@ -14,7 +14,6 @@ int				ssl_cleaner(t_ssl *data, int exit_result)
 {
 	(data->file_name != NULL) ? ft_strdel(&data->file_name) : 0;
 	(data->input_text != NULL) ? ft_strdel(&data->input_text) : 0;
-	(data->params != NULL) ? ft_memdel((void **)&data->params) : 0;
 	return (exit_result);
 }
 
@@ -27,7 +26,12 @@ int				error_option(char *s, t_ssl *data)
 	ft_putstr_fd(s, 2);
 	ft_putendl_fd(ERR_1_2, 2);
 	ft_putendl_fd(ERR_2, 2);
-	while (mdoptions[i] != NULL)
-		ft_putendl_fd(mdoptions[i++], 2);
+	while (mdcmds[i] != NULL)
+		ft_putendl_fd(mdcmds[i++], 2);
+	ft_putendl_fd("", 2);
+	ft_putendl_fd(ERR_3, 2);
+	i = 0;
+	while (cpcmds[i] != NULL)
+		ft_putendl_fd(cpcmds[i++], 2);
 	return (ssl_cleaner(data, EXIT_FAILURE));
 }

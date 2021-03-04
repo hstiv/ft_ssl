@@ -1,13 +1,41 @@
 #include "ft_ssl.h"
 
+mdcmds = {
+	"md5",
+	"sha256",
+	"sha224",
+	"sha512",
+	NULL
+};
+
+mdfunc = {
+	&md5,
+	&sha256,
+	&sha224,
+	&sha512,
+	NULL
+};
+
+cpcmd = {
+	"base64"
+};
+
+cpfunc = {
+	&base64
+};
+
 static int		parse_params(int argc, char **argv, t_ssl *data)
 {
 	int			i;
 
 	i = -1;
-	while (mdoptions[++i] != NULL)
-		if (ft_strcmp(mdoptions[i], argv[1]) == 0)
+	while (++i < MD_CMD_COUNT + CP_CMD_COUNT + ST_CMD_COUNT)
+	{
+		if (i < MD_CMD_COUNT && ft_strcmp(mdcmds[i], argv[1]) == 0)
 			return (parse_md_arg(argc, argv, data, i));
+		else if (i < CP_CMD_COUNT && ft_strcmp(cpcmds[i], argv[1]) == 0)
+			return (parse_cp_arg(argc, argv, data, i));
+	}
 	return (error_option(argv[1], data));
 }
 
@@ -15,19 +43,9 @@ static void		init_ssl(t_ssl *data)
 {
 	int			i;
 
-	i = 0;
-	mdoptions[0] = "md5";
-	mdoptions[1] = "sha256";
-	mdoptions[2] = "sha224";
-	mdoptions[3] = "sha512";
-	mdoptions[4] = NULL;
-	mdfunc[0] = &md5;
-	mdfunc[1] = &sha256;
-	mdfunc[2] = &sha224;
-	mdfunc[3] = &sha512;
-	mdfunc[4] = NULL;
-	while (i < 20)
-		data->params[i++] = 0;
+	i = -1;
+	while (++i < PARAM_COUNT - 2)
+		data->params[i] = 0;
 	data->input_text = NULL;
 	data->file_name = NULL;
 }
