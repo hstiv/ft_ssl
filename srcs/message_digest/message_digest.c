@@ -22,10 +22,10 @@ static char		*get_text(int fd)
 	return (s);
 }
 
-static int		read_args(char *argv, t_ssl *data, int func_index)
+static	int		read_args(char *argv, t_ssl *data, int func_index)
 {
 	int			fd;
-	
+
 	data->file_name = ft_strdup(argv);
 	if ((fd = open(argv, O_RDONLY)) != -1)
 		data->input_text = get_text(fd);
@@ -38,11 +38,11 @@ static int		read_args(char *argv, t_ssl *data, int func_index)
 	close(fd);
 	if (!data->input_text)
 	{
-		no_file_err(data, mdoptions[func_index]);
+		no_file_err(data, g_mdoptions[func_index]);
 		(data->file_name) ? ft_strdel(&data->file_name) : 0;
 		return (EXIT_SUCCESS);
 	}
-	return (md_print(mdfunc[func_index](data->input_text), data));
+	return (md_print(g_mdfunc[func_index](data->input_text), data));
 }
 
 static void		set_options(t_ssl *data, char c)
@@ -65,7 +65,7 @@ int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 	{
 		data->file_name = ft_strtrim(data->input_text);
 		data->params[STDIN_MODE] = 1;
-		if ((md_print(mdfunc[func_index](data->input_text), data))
+		if ((md_print(g_mdfunc[func_index](data->input_text), data))
 			== EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		data->params[_P] = 0;
@@ -73,7 +73,7 @@ int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 	}
 	else if (arg_count == 0)
 	{
-		if ((md_print(mdfunc[func_index](""), data))
+		if ((md_print(g_mdfunc[func_index](""), data))
 			== EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		data->params[_P] = 0;
@@ -82,7 +82,7 @@ int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 	return (EXIT_SUCCESS);
 }
 
-int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
+int				parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 {
 	int			i;
 	int			j;
@@ -95,7 +95,7 @@ int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 		while (argv[i][j] != '\0')
 		{
 			if (ft_strchr(MDPARAMS, argv[i][j]) == NULL)
-				return (ssl_cleaner(data, EXIT_FAILURE)); /* EXIT_FAILURE */
+				return (ssl_cleaner(data, EXIT_FAILURE));
 			set_options(data, argv[i][j]);
 			j++;
 		}

@@ -1,4 +1,7 @@
-#include <stdint.h>
+#ifndef F_SHA512_H
+# define F_SHA512_H
+
+# include <stdint.h>
 
 typedef struct	s_sha512
 {
@@ -22,3 +25,4 @@ uint64_t		s1_512(uint64_t word);
 uint64_t		ma_512(uint64_t a, uint64_t b, uint64_t c);
 uint64_t		ch_512(uint64_t e, uint64_t f, uint64_t g);
 
+#endif

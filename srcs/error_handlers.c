@@ -27,7 +27,7 @@ int				error_option(char *s, t_ssl *data)
 	ft_putstr_fd(s, 2);
 	ft_putendl_fd(ERR_1_2, 2);
 	ft_putendl_fd(ERR_2, 2);
-	while (mdoptions[i] != NULL)
-		ft_putendl_fd(mdoptions[i++], 2);
+	while (g_mdoptions[i] != NULL)
+		ft_putendl_fd(g_mdoptions[i++], 2);
 	return (ssl_cleaner(data, EXIT_FAILURE));
 }

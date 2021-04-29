@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static const char	*opt[5] = {
+static const char	*g_opt[5] = {
 	"MD5",
 	"SHA256",
 	"SHA224",
@@ -27,7 +27,7 @@ static void			print_output(char *msg, t_ssl *data)
 	{
 		if (!data->params[_R])
 		{
-			ft_putstr((opt[data->func_index]));
+			ft_putstr((g_opt[data->func_index]));
 			ft_putstr((data->file_name ? " (" : " (\""));
 			ft_putstr((data->file_name ? data->file_name : data->input_text));
 			ft_putstr((data->file_name ? ") = " : "\") = "));

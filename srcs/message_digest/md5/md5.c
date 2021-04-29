@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static const uint32_t k[BLOCK_64] = {
+static const uint32_t g_k[BLOCK_64] = {
 	0xd76aa478, 0xe8c7b756, 0x242070db, 0xc1bdceee,
 	0xf57c0faf, 0x4787c62a, 0xa8304613, 0xfd469501,
 	0x698098d8, 0x8b44f7af, 0xffff5bb1, 0x895cd7be,
@@ -19,14 +19,14 @@ static const uint32_t k[BLOCK_64] = {
 	0xf7537e82, 0xbd3af235, 0x2ad7d2bb, 0xeb86d391
 };
 
-static const int g[BLOCK_64] = {
+static const int g_g[BLOCK_64] = {
 	0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
 	1, 6, 11, 0, 5, 10, 15, 4, 9, 14, 3, 8, 13, 2, 7, 12,
 	5, 8, 11, 14, 1, 4, 7, 10, 13, 0, 3, 6, 9, 12, 15, 2,
 	0, 7, 14, 5, 12, 3, 10, 1, 8, 15, 6, 13, 4, 11, 2, 9
 };
 
-static const uint32_t s[BLOCK_64] = {
+static const uint32_t g_s[BLOCK_64] = {
 	7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17, 22, 7, 12, 17,
 	22, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14, 20, 5, 9, 14,
 	20, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11, 16, 23, 4, 11,
@@ -79,7 +79,8 @@ static void		md5_main_cycle(t_md5 *md5)
 		tmp = md5->aa[D];
 		md5->aa[D] = md5->aa[C];
 		md5->aa[C] = md5->aa[B];
-		md5->aa[B] = md5->aa[B] + (rotl32(md5->f + md5->aa[A] + k[i] + md5->m[g[i]], s[i]));
+		md5->aa[B] = md5->aa[B] + (rotl32(md5->f + md5->aa[A] +
+			g_k[i] + md5->m[g_g[i]], g_s[i]));
 		md5->aa[A] = tmp;
 	}
 }

@@ -5,8 +5,8 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 	int			i;
 
 	i = -1;
-	while (mdoptions[++i] != NULL)
-		if (ft_strcmp(mdoptions[i], argv[1]) == 0)
+	while (g_mdoptions[++i] != NULL)
+		if (ft_strcmp(g_mdoptions[i], argv[1]) == 0)
 			return (parse_md_arg(argc, argv, data, i));
 	return (error_option(argv[1], data));
 }
@@ -16,16 +16,16 @@ static void		init_ssl(t_ssl *data)
 	int			i;
 
 	i = 0;
-	mdoptions[0] = "md5";
-	mdoptions[1] = "sha256";
-	mdoptions[2] = "sha224";
-	mdoptions[3] = "sha512";
-	mdoptions[4] = NULL;
-	mdfunc[0] = &md5;
-	mdfunc[1] = &sha256;
-	mdfunc[2] = &sha224;
-	mdfunc[3] = &sha512;
-	mdfunc[4] = NULL;
+	g_mdoptions[0] = "md5";
+	g_mdoptions[1] = "sha256";
+	g_mdoptions[2] = "sha224";
+	g_mdoptions[3] = "sha512";
+	g_mdoptions[4] = NULL;
+	g_mdfunc[0] = &md5;
+	g_mdfunc[1] = &sha256;
+	g_mdfunc[2] = &sha224;
+	g_mdfunc[3] = &sha512;
+	g_mdfunc[4] = NULL;
 	while (i < 20)
 		data->params[i++] = 0;
 	data->input_text = NULL;
@@ -67,17 +67,16 @@ int				main(int argc, char **argv)
 		while (y != 0)
 		{
 			ft_putstr("SSL> ");
-			line = NULL;
 			if ((y = get_next_line(0, &line)) != 0)
 			{
 				s = argv_format(line);
-				ft_strdel(&line);
 				parse_params(ft_strlen2((const char **)s), s, &data);
 				ft_arraydel((void **)s);
 				free(s);
+				ft_strdel(&line);
 			}
 		}
-		return (EXIT_FAILURE);		
+		return (EXIT_FAILURE);
 	}
 	return (parse_params(argc, argv, &data));
 }

@@ -1,4 +1,7 @@
-#include <stdint.h>
+#ifndef F_MD5_H
+# define F_MD5_H
+
+# include <stdint.h>
 
 # define A0 0
 # define B0 1
@@ -22,3 +25,5 @@ uint32_t		f_func(uint32_t x, uint32_t y, uint32_t z);
 uint32_t		g_func(uint32_t x, uint32_t y, uint32_t z);
 uint32_t		h_func(uint32_t x, uint32_t y, uint32_t z);
 uint32_t		i_func(uint32_t x, uint32_t y, uint32_t z);
+
+#endif

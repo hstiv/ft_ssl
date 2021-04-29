@@ -34,7 +34,6 @@
 # define STDIN_MODE 4
 # define BASH_MODE 15
 
-
 # define MDPARAMS "pqrs"
 # define USAGE "usage: ft_ssl command [command opts] [command args]"
 # define ERR_1_1 "ft_ssl: Error: \'"
@@ -43,18 +42,20 @@
 
 typedef struct	s_ssl
 {
-    int         params[20];
-    char        *file_name;
-    char        *input_text;
+	int			params[20];
+	char		*file_name;
+	char		*input_text;
 	int			func_index;
 }				t_ssl;
 
+char			*(*g_mdfunc[5])(char *);
+char			*g_mdoptions[5];
+
 int				error_option(char *s, t_ssl *data);
-int             parse_md_arg(int argc, char **argv, t_ssl *data, int func_index);
+int				parse_md_arg(int argc, char **argv,
+							t_ssl *data, int func_index);
 int				ssl_cleaner(t_ssl *data, int exit_result);
 int				no_file_err(t_ssl *data, char *func_name);
 int				md_print(char *msg, t_ssl *data);
-char			*(*mdfunc[5])(char *);
-char            *mdoptions[5];
 
 #endif
