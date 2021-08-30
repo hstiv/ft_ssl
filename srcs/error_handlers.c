@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-int				no_file_err(t_ssl *data, char *func_name)
+int	no_file_err(t_ssl *data, char *func_name)
 {
 	ft_putstr("ft_ssl: ");
 	ft_putstr(func_name);
@@ -10,15 +10,16 @@ int				no_file_err(t_ssl *data, char *func_name)
 	return (ssl_cleaner(data, EXIT_FAILURE));
 }
 
-int				ssl_cleaner(t_ssl *data, int exit_result)
+int	ssl_cleaner(t_ssl *data, int exit_result)
 {
-	(data->file_name != NULL) ? ft_strdel(&data->file_name) : 0;
-	(data->input_text != NULL) ? ft_strdel(&data->input_text) : 0;
-	(data->params != NULL) ? ft_memdel((void **)&data->params) : 0;
+	if (data->file_name != NULL)
+		ft_strdel(&data->file_name);
+	if (data->input_text != NULL)
+		ft_strdel(&data->input_text);
 	return (exit_result);
 }
 
-int				error_option(char *s, t_ssl *data)
+int	error_option(char *s, t_ssl *data)
 {
 	int			i;
 

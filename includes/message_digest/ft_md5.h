@@ -1,5 +1,5 @@
-#ifndef F_MD5_H
-# define F_MD5_H
+#ifndef FT_MD5_H
+# define FT_MD5_H
 
 # include <stdint.h>
 
@@ -8,7 +8,7 @@
 # define C0 2
 # define D0 3
 
-typedef struct	s_md5
+typedef struct s_md5
 {
 	uint32_t	a[4];
 	uint32_t	aa[4];

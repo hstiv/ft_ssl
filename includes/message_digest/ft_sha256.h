@@ -1,9 +1,9 @@
-#ifndef F_SHA256_H
-# define F_SHA256_H
+#ifndef FT_SHA256_H
+# define FT_SHA256_H
 
 # include <stdint.h>
 
-typedef struct	s_sha256
+typedef struct s_sha256
 {
 	uint32_t	h[8];
 	uint32_t	ah[8];

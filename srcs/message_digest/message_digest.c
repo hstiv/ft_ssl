@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static char		*get_text(int fd)
+static char	*get_text(int fd)
 {
 	char		*s;
 	char		buff[3];
@@ -22,30 +22,33 @@ static char		*get_text(int fd)
 	return (s);
 }
 
-static	int		read_args(char *argv, t_ssl *data, int func_index)
+static int	read_args(char *argv, t_ssl *data, int func_index)
 {
 	int			fd;
 
 	data->file_name = ft_strdup(argv);
-	if ((fd = open(argv, O_RDONLY)) != -1)
+	fd = open(argv, O_RDONLY);
+	if (fd != -1)
 		data->input_text = get_text(fd);
 	else if (data->params[_S])
 	{
 		data->input_text = ft_strdup(argv);
-		(data->file_name) ? ft_strdel(&data->file_name) : 0;
+		if (data->file_name)
+			ft_strdel(&data->file_name);
 		data->params[_S] = 0;
 	}
 	close(fd);
 	if (!data->input_text)
 	{
 		no_file_err(data, g_mdoptions[func_index]);
-		(data->file_name) ? ft_strdel(&data->file_name) : 0;
+		if (data->file_name)
+			ft_strdel(&data->file_name);
 		return (EXIT_SUCCESS);
 	}
 	return (md_print(g_mdfunc[func_index](data->input_text), data));
 }
 
-static void		set_options(t_ssl *data, char c)
+static void	set_options(t_ssl *data, char c)
 {
 	if (c == 'p' || c == 'P')
 		data->params[_P] = 1;
@@ -58,9 +61,10 @@ static void		set_options(t_ssl *data, char c)
 	data->params[STDIN_MODE] = 0;
 }
 
-int				stdin_handler(t_ssl *data, int func_index, int arg_count)
+int	stdin_handler(t_ssl *data, int func_index, int arg_count)
 {
-	if (!data->params[BASH_MODE] && (data->input_text = get_text(0)) != NULL
+	data->input_text = get_text(0);
+	if (!data->params[BASH_MODE] && data->input_text != NULL
 		&& (data->params[_P] || !arg_count))
 	{
 		data->file_name = ft_strtrim(data->input_text);
@@ -82,7 +86,7 @@ int				stdin_handler(t_ssl *data, int func_index, int arg_count)
 	return (EXIT_SUCCESS);
 }
 
-int				parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
+int	parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
 {
 	int			i;
 	int			j;

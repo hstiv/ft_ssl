@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static int		parse_params(int argc, char **argv, t_ssl *data)
+static int	parse_params(int argc, char **argv, t_ssl *data)
 {
 	int			i;
 
@@ -11,11 +11,12 @@ static int		parse_params(int argc, char **argv, t_ssl *data)
 	return (error_option(argv[1], data));
 }
 
-static void		init_ssl(t_ssl *data)
+static void	init_ssl(t_ssl *data, int *y)
 {
 	int			i;
 
 	i = 0;
+	*y = 1;
 	g_mdoptions[0] = "md5";
 	g_mdoptions[1] = "sha256";
 	g_mdoptions[2] = "sha224";
@@ -32,7 +33,7 @@ static void		init_ssl(t_ssl *data)
 	data->file_name = NULL;
 }
 
-static char		**argv_format(char *s)
+static char	**argv_format(char *s)
 {
 	char		**argv;
 	char		**s1;
@@ -42,7 +43,7 @@ static char		**argv_format(char *s)
 	s1 = ft_strsplit(s, ' ');
 	len = ft_strlen2((const char **)s1);
 	i = -1;
-	argv = (char **)malloc(sizeof(char*) * (len + 2));
+	argv = (char **)malloc(sizeof(char *) * (len + 2));
 	argv[0] = ft_strdup("./ft_ssl");
 	while (++i < len)
 		argv[i + 1] = ft_strdup(s1[i]);
@@ -52,22 +53,22 @@ static char		**argv_format(char *s)
 	return (argv);
 }
 
-int				main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
 	t_ssl		data;
 	char		*line;
 	int			y;
 	char		**s;
 
-	init_ssl(&data);
-	y = 1;
+	init_ssl(&data, &y);
 	if (argc < 2)
 	{
 		data.params[BASH_MODE] = 1;
 		while (y != 0)
 		{
 			ft_putstr("SSL> ");
-			if ((y = get_next_line(0, &line)) != 0)
+			y = get_next_line(0, &line);
+			if (y > 0)
 			{
 				s = argv_format(line);
 				parse_params(ft_strlen2((const char **)s), s, &data);

@@ -2,10 +2,10 @@
 # define FT_SSL_H
 
 # include "libft.h"
-# include "md5.h"
-# include "sha256.h"
-# include "sha224.h"
-# include "sha512.h"
+# include "ft_md5.h"
+# include "ft_sha256.h"
+# include "ft_sha224.h"
+# include "ft_sha512.h"
 
 # define BLOCK_64 64
 # define BLOCK_32 32
@@ -40,7 +40,7 @@
 # define ERR_1_2 "\' is an invalid command.\n"
 # define ERR_2 "Message Digest commands:"
 
-typedef struct	s_ssl
+typedef struct s_ssl
 {
 	int			params[20];
 	char		*file_name;
@@ -48,12 +48,12 @@ typedef struct	s_ssl
 	int			func_index;
 }				t_ssl;
 
-char			*(*g_mdfunc[5])(char *);
+char			*(*(g_mdfunc)[5])(char *);
 char			*g_mdoptions[5];
 
 int				error_option(char *s, t_ssl *data);
 int				parse_md_arg(int argc, char **argv,
-							t_ssl *data, int func_index);
+					t_ssl *data, int func_index);
 int				ssl_cleaner(t_ssl *data, int exit_result);
 int				no_file_err(t_ssl *data, char *func_name);
 int				md_print(char *msg, t_ssl *data);

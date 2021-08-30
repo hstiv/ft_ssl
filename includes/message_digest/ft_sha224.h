@@ -1,9 +1,9 @@
-#ifndef F_SHA224_H
-# define F_SHA224_H
+#ifndef FT_SHA224_H
+# define FT_SHA224_H
 
 # include <stdint.h>
 
-typedef struct	s_sha224
+typedef struct s_sha224
 {
 	uint32_t	h[8];
 	uint32_t	ah[8];

@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static const uint32_t g_k[BLOCK_64] = {
+static const uint32_t	g_k[BLOCK_64] = {
 	0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
 	0x3956C25B, 0x59F111F1, 0x923F82A4, 0xAB1C5ED5,
 	0xD807AA98, 0x12835B01, 0x243185BE, 0x550C7DC3,
@@ -19,7 +19,7 @@ static const uint32_t g_k[BLOCK_64] = {
 	0x90BEFFFA, 0xA4506CEB, 0xBEF9A3F7, 0xC67178F2
 };
 
-static void			init_sha224(t_sha224 *data)
+static void	init_sha224(t_sha224 *data)
 {
 	data->h[H0] = 0xC1059ED8;
 	data->h[H1] = 0x367CD507;
@@ -31,13 +31,14 @@ static void			init_sha224(t_sha224 *data)
 	data->h[H7] = 0xBEFA4FA4;
 }
 
-static int			padding(char *s, t_sha224 *data)
+static int	padding(char *s, t_sha224 *data)
 {
 	int				i;
 
 	data->length = ft_strlen(s) * 8;
 	data->m = ((data->length + 80) / 512) + 1;
-	if (!(data->bytes = (uint32_t *)ft_memalloc(data->m * BLOCK_64)))
+	data->bytes = (uint32_t *)ft_memalloc(data->m * BLOCK_64);
+	if (!(data->bytes))
 		return (EXIT_FAILURE);
 	ft_memcpy((char *)data->bytes, s, ft_strlen(s));
 	((char *)data->bytes)[ft_strlen(s)] = 128;
@@ -48,7 +49,7 @@ static int			padding(char *s, t_sha224 *data)
 	return (EXIT_SUCCESS);
 }
 
-static void			fout(t_sha224 *data, int i)
+static void	fout(t_sha224 *data, int i)
 {
 	int				j;
 	uint32_t		s0;
@@ -66,7 +67,7 @@ static void			fout(t_sha224 *data, int i)
 	}
 }
 
-static void			swap_words(t_sha224 *d)
+static void	swap_words(t_sha224 *d)
 {
 	uint32_t		t1;
 	uint32_t		t2;
@@ -93,7 +94,7 @@ static void			swap_words(t_sha224 *d)
 	}
 }
 
-char				*sha224(char *s)
+char	*sha224(char *s)
 {
 	t_sha224		data;
 	int				i;

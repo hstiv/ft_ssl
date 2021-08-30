@@ -8,18 +8,15 @@ static const char	*g_opt[5] = {
 	NULL
 };
 
-static void			print_stdin(char *msg, t_ssl *data)
+static void	print_stdin(char *msg, t_ssl *data)
 {
 	if (data->params[_P])
-	{
-		ft_putendl_fd(data->file_name, 1);
-		ft_putendl_fd(msg, 1);
-	}
+		mprintf("%s\n%s\n", data->file_name, msg);
 	else
 		ft_putendl_fd(msg, 1);
 }
 
-static void			print_output(char *msg, t_ssl *data)
+static void	print_output(char *msg, t_ssl *data)
 {
 	if (data->params[STDIN_MODE])
 		print_stdin(msg, data);
@@ -28,24 +25,26 @@ static void			print_output(char *msg, t_ssl *data)
 		if (!data->params[_R])
 		{
 			ft_putstr((g_opt[data->func_index]));
-			ft_putstr((data->file_name ? " (" : " (\""));
-			ft_putstr((data->file_name ? data->file_name : data->input_text));
-			ft_putstr((data->file_name ? ") = " : "\") = "));
+			if (data->file_name)
+				mprintf(" (%s) = ", data->file_name);
+			else
+				mprintf(" (\"%s\") = ", data->input_text);
 			ft_putendl(msg);
 		}
 		else
 		{
 			ft_putstr(msg);
-			ft_putstr((data->file_name ? " " : " \""));
-			ft_putstr((data->file_name ? data->file_name : data->input_text));
-			ft_putendl((data->file_name ? "" : "\""));
+			if (data->file_name)
+				mprintf(" %s\n", data->file_name);
+			else
+				mprintf(" \"%s\"\n", data->input_text);
 		}
 	}
 	else
 		ft_putendl_fd(msg, 1);
 }
 
-int					md_print(char *msg, t_ssl *data)
+int	md_print(char *msg, t_ssl *data)
 {
 	int				i;
 
@@ -57,8 +56,10 @@ int					md_print(char *msg, t_ssl *data)
 	}
 	print_output(msg, data);
 	ft_strdel(&msg);
-	(data->input_text) ? ft_strdel(&data->input_text) : 0;
-	(data->file_name) ? ft_strdel(&data->file_name) : 0;
+	if (data->input_text)
+		ft_strdel(&data->input_text);
+	if (data->file_name)
+		ft_strdel(&data->file_name);
 	while (++i < 5)
 		data->params[i] = 0;
 	return (EXIT_SUCCESS);
