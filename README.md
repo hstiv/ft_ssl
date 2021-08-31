@@ -52,4 +52,7 @@ For example:
 
 # Also it is possible to use ft_ssl in bash mode, but keep in mind, that it works only with files!
 
-Useful Saurces: https://en.wikipedia.org/wiki/SHA-2 https://en.wikipedia.org/wiki/MD5 https://csrc.nist.gov/csrc/media/publications/fips/180/4/final/documents/fips180-4-draft-aug2014.pdf http://www.iusmentis.com/technology/hashfunctions/md5/
+Useful Sources:
+https://en.wikipedia.org/wiki/SHA-2 https://en.wikipedia.org/wiki/MD5
+https://csrc.nist.gov/csrc/media/publications/fips/180/4/final/documents/fips180-4-draft-aug2014.pdf
+http://www.iusmentis.com/technology/hashfunctions/md5/
