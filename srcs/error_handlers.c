@@ -1,34 +1,35 @@
 #include "ft_ssl.h"
 
-int	no_file_err(t_ssl *data, char *func_name)
+int	no_file_err(char *func_name)
 {
 	ft_putstr("ft_ssl: ");
 	ft_putstr(func_name);
 	ft_putstr(": ");
-	ft_putstr(data->file_name);
+	ft_putstr(g_ssl->file_name);
 	ft_putendl_fd(": No such file or directory", 2);
-	return (ssl_cleaner(data, EXIT_FAILURE));
+	return (ssl_cleaner(EXIT_FAILURE));
 }
 
-int	ssl_cleaner(t_ssl *data, int exit_result)
+int	ssl_cleaner(int exit_result)
 {
-	if (data->file_name != NULL)
-		ft_strdel(&data->file_name);
-	if (data->input_text != NULL)
-		ft_strdel(&data->input_text);
+	if (g_ssl->file_name != NULL)
+		ft_strdel(&g_ssl->file_name);
+	if (g_ssl->input_text != NULL)
+		ft_strdel(&g_ssl->input_text);
 	return (exit_result);
 }
 
-int	error_option(char *s, t_ssl *data)
+int	error_option(char *s)
 {
 	int			i;
 
 	i = 0;
-	ft_putstr_fd(ERR_1_1, 2);
-	ft_putstr_fd(s, 2);
-	ft_putendl_fd(ERR_1_2, 2);
-	ft_putendl_fd(ERR_2, 2);
-	while (g_mdoptions[i] != NULL)
-		ft_putendl_fd(g_mdoptions[i++], 2);
-	return (ssl_cleaner(data, EXIT_FAILURE));
+	mprintf("%s%s%s\n%s\n\n%s\n\n%s\n", ERR_1_1, s, ERR_1_2, USAGE, STD_CMDS, ERR_2);
+	while (i < MD_CMD_COUNT)
+		ft_putendl_fd(g_mdcmds[i++], 2);
+	mprintf("\n%s\n", ERR_3);
+	i = 0;
+	while (i < CP_CMD_COUNT)
+		ft_putendl_fd(g_cpcmds[i++], 2);
+	return (ssl_cleaner(EXIT_FAILURE));
 }

@@ -22,92 +22,92 @@ static char	*get_text(int fd)
 	return (s);
 }
 
-static int	read_args(char *argv, t_ssl *data, int func_index)
+static int	read_args(char *argv,int func_index)
 {
 	int			fd;
 
-	data->file_name = ft_strdup(argv);
+	g_ssl->file_name = ft_strdup(argv);
 	fd = open(argv, O_RDONLY);
 	if (fd != -1)
-		data->input_text = get_text(fd);
-	else if (data->params[_S])
+		g_ssl->input_text = get_text(fd);
+	else if (g_ssl->params[_S])
 	{
-		data->input_text = ft_strdup(argv);
-		if (data->file_name)
-			ft_strdel(&data->file_name);
-		data->params[_S] = 0;
+		g_ssl->input_text = ft_strdup(argv);
+		if (g_ssl->file_name)
+			ft_strdel(&g_ssl->file_name);
+		g_ssl->params[_S] = 0;
 	}
 	close(fd);
-	if (!data->input_text)
+	if (!g_ssl->input_text)
 	{
-		no_file_err(data, g_mdoptions[func_index]);
-		if (data->file_name)
-			ft_strdel(&data->file_name);
+		no_file_err(g_mdcmds[func_index]);
+		if (g_ssl->file_name)
+			ft_strdel(&g_ssl->file_name);
 		return (EXIT_SUCCESS);
 	}
-	return (md_print(g_mdfunc[func_index](data->input_text), data));
+	return (md_print(g_mdfunc[func_index](g_ssl->input_text)));
 }
 
-static void	set_options(t_ssl *data, char c)
+static void	set_options(char c)
 {
 	if (c == 'p' || c == 'P')
-		data->params[_P] = 1;
+		g_ssl->params[_P] = 1;
 	else if (c == 'q' || c == 'Q')
-		data->params[_Q] = 1;
+		g_ssl->params[_Q] = 1;
 	else if (c == 'r' || c == 'R')
-		data->params[_R] = 1;
+		g_ssl->params[_R] = 1;
 	else if (c == 's' || c == 'S')
-		data->params[_S] = 1;
-	data->params[STDIN_MODE] = 0;
+		g_ssl->params[_S] = 1;
+	g_ssl->params[STDIN_MODE] = 0;
 }
 
-int	stdin_handler(t_ssl *data, int func_index, int arg_count)
+static int	stdin_handler(int func_index, int arg_count)
 {
-	data->input_text = get_text(0);
-	if (!data->params[BASH_MODE] && data->input_text != NULL
-		&& (data->params[_P] || !arg_count))
+	g_ssl->input_text = get_text(0);
+	if (!g_ssl->params[BASH_MODE] && g_ssl->input_text != NULL
+		&& (g_ssl->params[_P] || !arg_count))
 	{
-		data->file_name = ft_strtrim(data->input_text);
-		data->params[STDIN_MODE] = 1;
-		if ((md_print(g_mdfunc[func_index](data->input_text), data))
+		g_ssl->file_name = ft_strtrim(g_ssl->input_text);
+		g_ssl->params[STDIN_MODE] = 1;
+		if ((md_print(g_mdfunc[func_index](g_ssl->input_text)))
 			== EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		data->params[_P] = 0;
-		data->params[STDIN_MODE] = 0;
+		g_ssl->params[_P] = 0;
+		g_ssl->params[STDIN_MODE] = 0;
 	}
 	else if (arg_count == 0)
 	{
-		if ((md_print(g_mdfunc[func_index](""), data))
+		if ((md_print(g_mdfunc[func_index]("")))
 			== EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		data->params[_P] = 0;
-		data->params[STDIN_MODE] = 0;
+		g_ssl->params[_P] = 0;
+		g_ssl->params[STDIN_MODE] = 0;
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	parse_md_arg(int argc, char **argv, t_ssl *data, int func_index)
+int	parse_md_arg(int argc, char **argv, int func_index)
 {
 	int			i;
 	int			j;
 
 	i = 2;
-	data->func_index = func_index;
+	g_ssl->func_index = func_index;
 	while (i < argc && argv && argv[i] && argv[i][0] == '-')
 	{
 		j = 1;
 		while (argv[i][j] != '\0')
 		{
 			if (ft_strchr(MDPARAMS, argv[i][j]) == NULL)
-				return (ssl_cleaner(data, EXIT_FAILURE));
-			set_options(data, argv[i][j]);
+				return (ssl_cleaner(EXIT_FAILURE));
+			set_options(argv[i][j]);
 			j++;
 		}
 		i++;
 	}
-	stdin_handler(data, func_index, argc - i);
+	stdin_handler(func_index, argc - i);
 	while (i < argc)
-		if (read_args(argv[i++], data, func_index) == EXIT_FAILURE)
+		if (read_args(argv[i++], func_index) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
