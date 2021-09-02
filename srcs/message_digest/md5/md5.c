@@ -43,7 +43,7 @@ static void	init_md5(t_md5 *data)
 	data->m_cycle = 0;
 }
 
-static int	padding_bytes(t_md5 *md5, char *s)
+static void	padding_bytes(t_md5 *md5, char *s)
 {
 	int			len;
 
@@ -54,11 +54,10 @@ static int	padding_bytes(t_md5 *md5, char *s)
 		md5->length++;
 	md5->bytes = ft_strnew(md5->length + BLOCK_64);
 	if (!(md5->bytes))
-		return (EXIT_FAILURE);
+		clean_exit(EXIT_FAILURE);
 	md5->bytes = ft_strcpy((char *)md5->bytes, s);
 	*(uint32_t *)(md5->bytes + len) = 128;
 	*(uint32_t *)(md5->bytes + md5->length) = (uint32_t)(8 * len);
-	return (EXIT_SUCCESS);
 }
 
 static void	md5_main_cycle(t_md5 *md5)
@@ -90,8 +89,7 @@ char	*md5(char *s)
 {
 	t_md5		md5;
 
-	if (padding_bytes(&md5, s) == EXIT_FAILURE)
-		return (NULL);
+	padding_bytes(&md5, s);
 	while (md5.m_cycle < md5.length)
 	{
 		md5.m = (uint32_t *)(md5.bytes + md5.m_cycle);
