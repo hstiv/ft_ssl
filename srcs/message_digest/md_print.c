@@ -44,16 +44,13 @@ static void	print_output(char *msg)
 		ft_putendl_fd(msg, 1);
 }
 
-int	md_print(char *msg)
+void	md_print(char *msg)
 {
 	int				i;
 
 	i = -1;
 	if (msg == NULL)
-	{
-		ft_putendl_fd("Error: malloc() doesn't work!", 2);
-		return (ssl_cleaner(EXIT_FAILURE));
-	}
+		fman("Memory allocation error.", EXIT_FAILURE);
 	print_output(msg);
 	ft_strdel(&msg);
 	if (g_ssl->input_text)
@@ -62,5 +59,4 @@ int	md_print(char *msg)
 		ft_strdel(&g_ssl->file_name);
 	while (++i < 5)
 		g_ssl->params[i] = 0;
-	return (EXIT_SUCCESS);
 }

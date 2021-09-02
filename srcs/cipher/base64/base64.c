@@ -12,7 +12,7 @@ static char	base_table[] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
 static size_t	mod_table[] = {0, 2, 1};
 
 static uint32_t	encode_triple(size_t input_length,
-					const char *data, size_t *i)
+					const unsigned char *data, size_t *i)
 {
 	uint32_t	octet_a;
 	uint32_t	octet_b;
@@ -32,7 +32,7 @@ static uint32_t	encode_triple(size_t input_length,
 	return(triple);
 }
 
-char	*base64_encode(const char *data,
+char	*base64_encode(const unsigned char *data,
 			size_t input_length, size_t *output_length)
 {
 	uint32_t	triple;
@@ -87,10 +87,10 @@ static int32_t	decode_triple(const char *data, size_t *i)
         + (sextet_c << 1 * 6) + (sextet_d << 0 * 6));
 }
 
-char	*base64_decode(const char *data,
+unsigned char	*base64_decode(const char *data,
 			size_t input_length, size_t *output_length)
 {
-	char			*decoded_data;
+	unsigned char	*decoded_data;
 	uint32_t		triple;
 	size_t			i;
 	size_t			j;
@@ -100,7 +100,7 @@ char	*base64_decode(const char *data,
     *output_length = input_length / 4 * 3;
     if (data[input_length - 1] == '=') (*output_length)--;
     if (data[input_length - 2] == '=') (*output_length)--;
-    decoded_data = ft_strnew(*output_length);
+    decoded_data = (unsigned char *)ft_strnew(*output_length);
     if (decoded_data == NULL)
 		return NULL;
 	i = 0;
@@ -115,18 +115,17 @@ char	*base64_decode(const char *data,
     return decoded_data;
 }
 
-int				base64()
+char	*base64(char *text)
 {
 	size_t		output_length;
 	char		*output;
 
 	if (g_ssl->params[E])
-		output = base64_encode(g_ssl->input_text,
-			ft_strlen(g_ssl->input_text), &output_length);
-	else if (g_ssl->params[D])
-		output = base64_decode(g_ssl->input_text,
-			ft_strlen(g_ssl->input_text), &output_length);
+		output = base64_encode((unsigned char*)text,
+			ft_strlen(text), &output_length);
+	else
+		output = (char *)base64_decode(text,
+			ft_strlen(text), &output_length);
 	output[output_length] = '\0';
-	printf("%s -> %s\n", "Cg==", base64_decode("Cg==", 4, &output_length));
-	return (EXIT_SUCCESS);
+	return (output);
 }

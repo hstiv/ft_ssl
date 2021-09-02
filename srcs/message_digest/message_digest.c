@@ -1,28 +1,6 @@
 #include "ft_ssl.h"
 
-static char	*get_text(int fd)
-{
-	char		*s;
-	char		buff[3];
-	char		*tmp;
-	int			input_size;
-
-	s = ft_strdup("");
-	input_size = 0;
-	while (read(fd, buff, 1) > 0)
-	{
-		tmp = s;
-		buff[1] = '\0';
-		s = ft_strjoin(s, buff);
-		ft_strdel(&tmp);
-		input_size++;
-	}
-	if (input_size == 0)
-		ft_strdel(&s);
-	return (s);
-}
-
-static int	read_args(char *argv,int func_index)
+static void	read_args(char *argv,int func_index)
 {
 	int			fd;
 
@@ -43,9 +21,9 @@ static int	read_args(char *argv,int func_index)
 		no_file_err(g_mdcmds[func_index]);
 		if (g_ssl->file_name)
 			ft_strdel(&g_ssl->file_name);
-		return (EXIT_SUCCESS);
+		return ;
 	}
-	return (md_print(g_mdfunc[func_index](g_ssl->input_text)));
+	md_print(g_mdfunc[func_index](g_ssl->input_text));
 }
 
 static void	set_options(char c)
@@ -58,10 +36,12 @@ static void	set_options(char c)
 		g_ssl->params[_R] = 1;
 	else if (c == 's' || c == 'S')
 		g_ssl->params[_S] = 1;
+	else if (c == 'h' || c == 'H')
+		fman(MD_USAGE, EXIT_SUCCESS);
 	g_ssl->params[STDIN_MODE] = 0;
 }
 
-static int	stdin_handler(int func_index, int arg_count)
+static void	stdin_handler(int func_index, int arg_count)
 {
 	g_ssl->input_text = get_text(0);
 	if (!g_ssl->params[BASH_MODE] && g_ssl->input_text != NULL
@@ -69,21 +49,16 @@ static int	stdin_handler(int func_index, int arg_count)
 	{
 		g_ssl->file_name = ft_strtrim(g_ssl->input_text);
 		g_ssl->params[STDIN_MODE] = 1;
-		if ((md_print(g_mdfunc[func_index](g_ssl->input_text)))
-			== EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		md_print(g_mdfunc[func_index](g_ssl->input_text));
 		g_ssl->params[_P] = 0;
 		g_ssl->params[STDIN_MODE] = 0;
 	}
 	else if (arg_count == 0)
 	{
-		if ((md_print(g_mdfunc[func_index]("")))
-			== EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		md_print(g_mdfunc[func_index](""));
 		g_ssl->params[_P] = 0;
 		g_ssl->params[STDIN_MODE] = 0;
 	}
-	return (EXIT_SUCCESS);
 }
 
 int	parse_md_arg(int argc, char **argv, int func_index)
@@ -99,7 +74,7 @@ int	parse_md_arg(int argc, char **argv, int func_index)
 		while (argv[i][j] != '\0')
 		{
 			if (ft_strchr(MDPARAMS, argv[i][j]) == NULL)
-				return (ssl_cleaner(EXIT_FAILURE));
+				fman(MD_USAGE, EXIT_FAILURE);
 			set_options(argv[i][j]);
 			j++;
 		}
@@ -107,7 +82,6 @@ int	parse_md_arg(int argc, char **argv, int func_index)
 	}
 	stdin_handler(func_index, argc - i);
 	while (i < argc)
-		if (read_args(argv[i++], func_index) == EXIT_FAILURE)
-			return (EXIT_FAILURE);
+		read_args(argv[i++], func_index);
 	return (EXIT_SUCCESS);
 }

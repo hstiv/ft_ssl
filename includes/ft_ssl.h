@@ -58,8 +58,16 @@
 # define CP_CMD_COUNT 1
 # define ST_CMD_COUNT 0
 
-# define MDPARAMS "pqrs"
+# define MDPARAMS "pqrsh"
 # define CPPARAMS "adeikopsv"
+# define MD_USAGE "\t-p\techo STDIN to STDOUT and append the check sum to STDOUT.\n \
+\t-q\tquiet mode.\n \
+\t-r\treverse the format of the out put.\n \
+\t-s\tprint the sum of the given string.\n"
+# define B64_USAGE "\t-d\tdecode mode.\n\
+\t-e\tencode mode (default).\n\
+\t-i\tinput file\n\
+\t-o\tout put file\n"
 # define USAGE "usage: ft_ssl command [command opts] [command args]"
 # define STD_CMDS "Standard commands:"
 # define ERR_1_1 "ft_ssl: Error: \'"
@@ -73,6 +81,8 @@ typedef struct s_ssl
 	char		*file_name;
 	char		*input_text;
 	int			func_index;
+	char		*input_file_text;
+	char		*output_file_path;
 }				t_ssl;
 
 t_ssl			*g_ssl;
@@ -80,15 +90,16 @@ t_ssl			*g_ssl;
 char			*g_mdcmds[MD_CMD_COUNT];
 char			*g_cpcmds[CP_CMD_COUNT];
 char			*(*(g_mdfunc)[MD_CMD_COUNT])(char *);
-int				(*(g_cpfunc)[CP_CMD_COUNT])();
+char			*(*(g_cpfunc)[CP_CMD_COUNT])();
 
-int				error_option(char *s);
+void			man(char *s, int exit_code);
+char			*get_text(int fd);
 int				parse_md_arg(int argc, char **argv,
 					int func_index);
-int             parse_cp_arg(int argc, char **argv,
-					int func_index);
-int				ssl_cleaner(int exit_result);
-int				no_file_err(char *func_name);
-int				md_print(char *msg);
+void			md_print(char *msg);
+void			clean_exit(int exit_code);
+void			fman(char *usage, int exit_code);
+void			no_file_err(char *func_name);
+char			*ft_strtolower(char *str);
 
 #endif

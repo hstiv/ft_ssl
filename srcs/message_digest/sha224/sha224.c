@@ -31,7 +31,7 @@ static void	init_sha224(t_sha224 *data)
 	data->h[H7] = 0xBEFA4FA4;
 }
 
-static int	padding(char *s, t_sha224 *data)
+static void	padding(char *s, t_sha224 *data)
 {
 	int				i;
 
@@ -39,14 +39,13 @@ static int	padding(char *s, t_sha224 *data)
 	data->m = ((data->length + 80) / 512) + 1;
 	data->bytes = (uint32_t *)ft_memalloc(data->m * BLOCK_64);
 	if (!(data->bytes))
-		return (EXIT_FAILURE);
+		clean_exit(EXIT_FAILURE);
 	ft_memcpy((char *)data->bytes, s, ft_strlen(s));
 	((char *)data->bytes)[ft_strlen(s)] = 128;
 	i = -1;
 	while (++i < (data->m * 16) - 1)
 		data->bytes[i] = rev_uint32(data->bytes[i]);
 	data->bytes[((data->m * 512 - 64) / 32) + 1] = data->length;
-	return (EXIT_SUCCESS);
 }
 
 static void	fout(t_sha224 *data, int i)
@@ -102,8 +101,7 @@ char	*sha224(char *s)
 
 	i = -1;
 	init_sha224(&data);
-	if (padding(s, &data) == EXIT_FAILURE)
-		return (NULL);
+	padding(s, &data);
 	while (++i < data.m)
 	{
 		fout(&data, i);

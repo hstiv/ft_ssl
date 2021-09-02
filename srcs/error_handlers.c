@@ -1,35 +1,44 @@
 #include "ft_ssl.h"
 
-int	no_file_err(char *func_name)
+void	no_file_err(char *func_name)
 {
-	ft_putstr("ft_ssl: ");
-	ft_putstr(func_name);
-	ft_putstr(": ");
-	ft_putstr(g_ssl->file_name);
-	ft_putendl_fd(": No such file or directory", 2);
-	return (ssl_cleaner(EXIT_FAILURE));
+	mprintf("ft_ssl: %s: %s: No such file or directory\n", func_name, g_ssl->file_name);
+	clean_exit(EXIT_FAILURE);
 }
 
-int	ssl_cleaner(int exit_result)
+void	fman(char *usage, int exit_code)
+{
+	mprintf("%s", usage);
+	clean_exit(exit_code);
+}
+
+void	clean_exit(int exit_code)
 {
 	if (g_ssl->file_name != NULL)
 		ft_strdel(&g_ssl->file_name);
 	if (g_ssl->input_text != NULL)
 		ft_strdel(&g_ssl->input_text);
-	return (exit_result);
+	if (g_ssl->input_file_text != NULL)
+		ft_strdel(&g_ssl->input_file_text);
+	if (g_ssl->output_file_path != NULL)
+		ft_strdel(&g_ssl->output_file_path);
+	exit (exit_code);
 }
 
-int	error_option(char *s)
+void	man(char *s, int exit_code)
 {
 	int			i;
 
 	i = 0;
-	mprintf("%s%s%s\n%s\n\n%s\n\n%s\n", ERR_1_1, s, ERR_1_2, USAGE, STD_CMDS, ERR_2);
+	if (exit_code == EXIT_FAILURE)
+		mprintf("%s%s%s\n%s\n\n%s\n\n%s\n", ERR_1_1, s, ERR_1_2, USAGE, STD_CMDS, ERR_2);
+	else
+		mprintf("%s\n\n%s\n\n%s\n", USAGE, STD_CMDS, ERR_2);
 	while (i < MD_CMD_COUNT)
 		ft_putendl_fd(g_mdcmds[i++], 2);
 	mprintf("\n%s\n", ERR_3);
 	i = 0;
 	while (i < CP_CMD_COUNT)
 		ft_putendl_fd(g_cpcmds[i++], 2);
-	return (ssl_cleaner(EXIT_FAILURE));
+	clean_exit(exit_code);
 }
