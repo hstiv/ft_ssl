@@ -40,5 +40,5 @@ char	*ft_strtolower(char *str)
 		s[i] = ft_tolower(str[i]);
 		i++;
 	}
-	return(s);
+	return (s);
 }

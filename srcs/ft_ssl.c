@@ -5,12 +5,10 @@ static int	parse_params(int argc, char **argv)
 	int			i;
 
 	i = -1;
-	while (++i < MD_CMD_COUNT + CP_CMD_COUNT + ST_CMD_COUNT)
+	while (++i < MD_CMD_COUNT)
 	{
 		if (i < MD_CMD_COUNT && !ft_strcmp(g_mdcmds[i], argv[1]))
 			return (parse_md_arg(argc, argv, i));
-		else if (!ft_strcmp("base64", argv[1]))
-			return (base64_parser(argc, argv));
 		else if (!ft_strcmp("exit", argv[1]))
 			clean_exit(EXIT_SUCCESS);
 		else if (!ft_strcmp("help", argv[1]))
@@ -33,18 +31,14 @@ static void	init_ssl(t_ssl *data)
 	g_mdcmds[1] = "sha256";
 	g_mdcmds[2] = "sha224";
 	g_mdcmds[3] = "sha512";
-	g_cpcmds[0] = "base64";
 	g_mdfunc[0] = &md5;
 	g_mdfunc[1] = &sha256;
 	g_mdfunc[2] = &sha224;
 	g_mdfunc[3] = &sha512;
-	g_cpfunc[0] = &base64;
 	while (++i < PARAM_COUNT - 2)
 		data->params[i] = 0;
 	data->input_text = NULL;
 	data->file_name = NULL;
-	data->input_file_text = NULL;
-	data->output_file_path = NULL;
 	g_ssl = data;
 }
 
@@ -70,7 +64,7 @@ static char	**argv_format(char *s)
 	return (argv);
 }
 
-void	bash_mode()
+static void	bash_mode(void)
 {
 	char		*line;
 	int			y;
@@ -86,7 +80,7 @@ void	bash_mode()
 		{
 			s = argv_format(line);
 			if (parse_params(ft_strlen2((const char **)s), s) == EXIT_FAILURE)
-				mprintf("Invalid command \'%s\'; type \"help\" for a list.", s);
+				mprintf("Invalid command, type \"help\" for a list.\n");
 			ft_arraydel((void **)s);
 			free(s);
 			ft_strdel(&line);

@@ -1,6 +1,6 @@
 #include "ft_ssl.h"
 
-static void	read_args(char *argv,int func_index)
+static void	read_args(char *argv, int func_index)
 {
 	int			fd;
 

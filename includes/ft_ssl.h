@@ -6,7 +6,6 @@
 # include "ft_sha256.h"
 # include "ft_sha224.h"
 # include "ft_sha512.h"
-# include "ft_base64.h"
 
 # define BLOCK_64 64
 # define BLOCK_32 32
@@ -55,11 +54,9 @@
 # define PARAM_COUNT 30
 
 # define MD_CMD_COUNT 4
-# define CP_CMD_COUNT 1
 # define ST_CMD_COUNT 0
 
 # define MDPARAMS "pqrsh"
-# define CPPARAMS "adeikopsv"
 # define MD_USAGE "\t-p\techo STDIN to STDOUT and append the check sum to STDOUT.\n \
 \t-q\tquiet mode.\n \
 \t-r\treverse the format of the out put.\n \
@@ -81,16 +78,12 @@ typedef struct s_ssl
 	char		*file_name;
 	char		*input_text;
 	int			func_index;
-	char		*input_file_text;
-	char		*output_file_path;
 }				t_ssl;
 
 t_ssl			*g_ssl;
 
 char			*g_mdcmds[MD_CMD_COUNT];
-char			*g_cpcmds[CP_CMD_COUNT];
 char			*(*(g_mdfunc)[MD_CMD_COUNT])(char *);
-char			*(*(g_cpfunc)[CP_CMD_COUNT])();
 
 void			man(char *s, int exit_code);
 char			*get_text(int fd);
